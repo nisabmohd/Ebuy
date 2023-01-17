@@ -51,11 +51,6 @@ const userSchema = new Schema(
     ],
     orders: [
       {
-        productId: {
-          type: Schema.Types.ObjectId,
-          ref: "products",
-          required: true,
-        },
         orderId: {
           type: Schema.Types.ObjectId,
           ref: "orders",
