@@ -39,7 +39,6 @@ const userSchema = new Schema(
           {
             number: String,
             prefix: String,
-            required: true,
           },
         ],
       },
@@ -57,7 +56,6 @@ const userSchema = new Schema(
         orderId: {
           type: Schema.Types.ObjectId,
           ref: "orders",
-          required: true,
         },
       },
     ],
