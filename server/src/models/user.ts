@@ -1,21 +1,23 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model, InferSchemaType } from "mongoose";
 
 const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: [true, "email is required"],
-      validate: [validateEmail, "Invalid email"],
+      required: true,
     },
-    mobile: { number: String, prefix: String },
+    mobile: {
+      prefix: String,
+      number: String,
+    },
     password: {
       type: String,
-      required: [true, "Password is required"],
-      min: [6, "Password is too short"],
+      required: true,
+      min: 6,
     },
-    firstName: {
+    fistname: {
       type: String,
-      required: [true, "Firstname is needed"],
+      required: true,
     },
     lastname: String,
     avatar: String,
@@ -23,21 +25,21 @@ const userSchema = new Schema(
       {
         address: {
           type: String,
-          required: [true, "Address is required"],
+          required: true,
         },
         city: {
           type: String,
-          required: [true, "City is required for an address feild"],
+          required: true,
         },
         state: {
           type: String,
-          required: [true, "State is required for an address feild"],
+          required: true,
         },
         phone: [
           {
             number: String,
             prefix: String,
-            required: [true, "Invalid phone number provided"],
+            required: true,
           },
         ],
       },
@@ -78,7 +80,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    //   savedCards: [],
     reviews: [
       {
         review: { type: Schema.Types.ObjectId, ref: "reviews" },
@@ -93,12 +94,6 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const validateEmail = (email) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+type userSchemaType = InferSchemaType<typeof userSchema>;
 
-module.exports = new model("users", userSchema);
+export default model<userSchemaType>("users", userSchema);

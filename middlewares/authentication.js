@@ -1,1 +1,0 @@
-const authenticate = (req, res) => {};

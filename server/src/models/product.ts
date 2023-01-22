@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model, InferSchemaType } from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -6,10 +6,7 @@ const productSchema = new Schema(
       type: String,
       require: true,
     },
-    brand: {
-      name: String,
-      warranty: String,
-    },
+    brand: String,
     description: {
       type: String,
       require: true,
@@ -17,7 +14,7 @@ const productSchema = new Schema(
     colors: [
       {
         color: String,
-        image: String,
+        image: [{ type: String }],
       },
     ],
     reviews: [
@@ -31,14 +28,6 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
-    images: {
-      type: [
-        {
-          img: String,
-        },
-      ],
-      validate: [imagesValidator, "Atleast there should be 3 product images"],
-    },
     originalPrice: {
       type: Number,
       require: true,
@@ -49,20 +38,17 @@ const productSchema = new Schema(
     },
     highlights: [
       {
-        note: String,
+        type: String,
       },
     ],
     highlightedImages: [
       {
-        img: String,
+        type: String,
       },
     ],
   },
   { timestamps: true }
 );
 
-function imagesValidator(val) {
-  return val.length >= 3;
-}
-
-module.exports = new model("products", productSchema);
+type productSchemaType = InferSchemaType<typeof productSchema>;
+export default model<productSchemaType>("products", productSchema);

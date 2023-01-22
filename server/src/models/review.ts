@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model, InferSchemaType } from "mongoose";
 
 const reviewSchema = new Schema(
   {
@@ -13,14 +13,14 @@ const reviewSchema = new Schema(
     },
     rating: {
       type: Number,
-      min: [1, "Minimum ratings could be 1"],
-      max: [5, "Maximum ratings could be 5"],
+      min: 1,
+      max: 5,
       required: true,
     },
     productId: {
       type: Schema.Types.ObjectId,
       ref: "products",
-      required: [true, "Please mention product id"],
+      required: true,
     },
     images: [{ img: { type: String, required: true } }],
     likes: [
@@ -45,4 +45,5 @@ const reviewSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = new model("reviews", reviewSchema);
+type reviewSchemaType = InferSchemaType<typeof reviewSchema>;
+export default model<reviewSchemaType>("reviews", reviewSchema);

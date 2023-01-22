@@ -1,1 +1,0 @@
-const checkAdmin = (req, res) => {};

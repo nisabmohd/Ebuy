@@ -1,1 +1,0 @@
-const authorize = (req, res) => {};

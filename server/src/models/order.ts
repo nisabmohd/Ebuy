@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model, InferSchemaType } from "mongoose";
 
 const orderSchema = new Schema(
   {
@@ -20,25 +20,25 @@ const orderSchema = new Schema(
       enum: ["DELIVERED", "CANCELLED", "PROCESSING", "CONFIRMED"],
       default: "PROCESSING",
     },
-    transactionID: string,
+    transactionID: String,
     deliveryAddress: {
       address: {
         type: String,
-        required: [true, "Address is required"],
+        required: true,
       },
       city: {
         type: String,
-        required: [true, "City is required for an address feild"],
+        required: true,
       },
       state: {
         type: String,
-        required: [true, "State is required for an address feild"],
+        required: true,
       },
       phone: [
         {
           number: String,
           prefix: String,
-          required: [true, "Invalid phone number provided"],
+          required: true,
         },
       ],
     },
@@ -56,4 +56,5 @@ const orderSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = new model("orders", orderSchema);
+type orderSchemaType = InferSchemaType<typeof orderSchema>;
+export default model<orderSchemaType>("orders", orderSchema);
