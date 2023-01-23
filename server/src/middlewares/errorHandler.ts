@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Err from "../utils/error";
+import Blunder from "../utils/error";
 
 export const errorHandler = (
   err: Error,
@@ -7,7 +7,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  if (err instanceof Err) {
+  if (err instanceof Blunder) {
     res.status(err.statusCode).send({ message: err.message });
   } else {
     res.status(500).send({ message: err.message ?? "Internal Server Error" });

@@ -4,11 +4,10 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: true,
     },
     mobile: {
-      prefix: String,
-      number: String,
+      type: String,
+      required: true,
     },
     password: {
       type: String,

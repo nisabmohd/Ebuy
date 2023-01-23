@@ -7,14 +7,10 @@ const productSchema = new Schema(
       require: true,
     },
     brand: String,
-    description: {
-      type: String,
-      require: true,
-    },
     colors: [
       {
         color: String,
-        image: [{ type: String }],
+        images: [{ type: String }],
       },
     ],
     reviews: [
@@ -46,6 +42,9 @@ const productSchema = new Schema(
         type: String,
       },
     ],
+    specifications: {
+      type: {},
+    },
   },
   { timestamps: true }
 );
