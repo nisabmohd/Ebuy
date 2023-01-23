@@ -26,7 +26,7 @@ export const signup = asyncHandler(
     next
   ) => {
     const { email, password, firstname, mobile } = req.body;
-    const ifUser = await User.findOne({ email });
+    const ifUser = await User.findOne({ mobile });
     if (ifUser) throw new Blunder("User already exist", 409);
     const newUser = new User({
       email,

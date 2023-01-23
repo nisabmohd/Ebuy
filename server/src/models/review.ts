@@ -22,7 +22,7 @@ const reviewSchema = new Schema(
       ref: "products",
       required: true,
     },
-    images: [{ img: { type: String, required: true } }],
+    images: [{ type: String, required: true }],
     likes: [
       {
         userId: {

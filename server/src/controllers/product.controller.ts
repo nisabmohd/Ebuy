@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/product";
 import Blunder from "../utils/error";
+import Review from "../models/review";
+import User from "../models/user";
 
 export const getProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.findOne({ _id: req.params.id });
@@ -34,4 +36,33 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
 export const createProduct = asyncHandler(async (req, res, next) => {
   const product = await new Product(req.body).save();
   res.json(product);
+});
+
+export const reviewProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { userId } = req;
+  const product = await Product.findOne({ _id: id });
+  if (!product) throw new Blunder("No products found", 404);
+  const review = await new Review({
+    userId,
+    productId: id,
+    ...req.body,
+  }).save();
+  const reviewed = await Product.updateOne(
+    { _id: id },
+    {
+      $push: { reviews: review._id },
+      $set: {
+        rating:
+          (product!.rating + req.body.rating) / (product!.reviews.length + 1),
+      },
+    }
+  );
+  await User.updateOne({ _id: userId }, { $push: { reviews: review._id } });
+  res.json({
+    success: reviewed.modifiedCount != 0,
+    message: reviewed.modifiedCount
+      ? "Succesfully added review"
+      : "Unable to review",
+  });
 });
