@@ -3,7 +3,7 @@ import cartIcon from "../../assets/cart.png";
 import profileIcon from "../../assets/user.png";
 import heartIcon from "../../assets/heart.png";
 import style from "./navbar.module.css";
-import logo from "../../assets/logo.png";
+import Logo from "./Logo";
 
 export default function Navbar() {
   return (
@@ -19,18 +19,7 @@ export default function Navbar() {
         height: "60px",
       }}
     >
-      <div
-        className="logo"
-        style={{
-          marginLeft: "1vw",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <img style={{ width: "40px", marginRight: "3px" }} src={logo} alt="" />
-        <p style={{ fontSize: "22px", fontWeight: "bold" }}>Ebuy &nbsp;</p>
-      </div>
+      <Logo />
       <Search />
       <div
         style={{

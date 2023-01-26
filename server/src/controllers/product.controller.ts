@@ -95,6 +95,11 @@ export const deleteReview = asyncHandler(async (req, res, next) => {
   res.json({ message: "deleted" });
 });
 
+export const getProducts = asyncHandler(async (req, res, next) => {
+  const products = await Product.findOne(req.body);
+  res.json(products);
+});
+
 // Admin
 //--------
 export const updateProduct = asyncHandler(async (req, res, next) => {
