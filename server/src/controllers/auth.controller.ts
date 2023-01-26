@@ -1,7 +1,7 @@
 import { Request } from "express";
 import User from "../models/user";
 import asyncHandler from "express-async-handler";
-import Blunder from "../utils/error";
+import ServerError from "../utils/error";
 import { hashSync, compareSync } from "bcrypt";
 import jwt from "jsonwebtoken";
 import env from "../utils/envalid";
@@ -27,7 +27,7 @@ export const signup = asyncHandler(
   ) => {
     const { email, password, firstname, mobile } = req.body;
     const ifUser = await User.findOne({ mobile });
-    if (ifUser) throw new Blunder("User already exist", 409);
+    if (ifUser) throw new ServerError("User already exist", 409);
     const newUser = new User({
       email,
       password: hashSync(password, 10),
@@ -57,9 +57,9 @@ export const signin = asyncHandler(
     const user = await User.findOne({
       $or: [{ email: emailOrPhone }, { phone: emailOrPhone }],
     });
-    if (!user) throw new Blunder("User doesn't exist", 400);
+    if (!user) throw new ServerError("User doesn't exist", 400);
     const compare = compareSync(password, user.password);
-    if (!compare) throw new Blunder("Password doesn't match", 401);
+    if (!compare) throw new ServerError("Password doesn't match", 401);
     const access_token = jwt.sign({ id: user._id }, env.JWT_SECRET, {
       expiresIn: "30m",
     });
@@ -77,7 +77,7 @@ export const signout = asyncHandler(
     const { refresh_token } = req.body;
     const loggedOut = await Token.deleteOne({ token: refresh_token });
     if (!loggedOut.deletedCount)
-      throw new Blunder("Something went wrong!", 400);
+      throw new ServerError("Something went wrong!", 400);
     res.json({ message: "logged out succesfully" });
   }
 );
@@ -85,7 +85,6 @@ export const signout = asyncHandler(
 interface TokenRequest<T> extends Request {
   body: T;
 }
-
 export const handleToken = asyncHandler(
   async (req: TokenRequest<{ token: string }>, res, next) => {
     const { token } = req.body;

@@ -1,0 +1,8 @@
+.tab {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+}

@@ -15,9 +15,16 @@ const productSchema = new Schema(
     ],
     reviews: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "reviews",
-        required: true,
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "users",
+          required: true,
+        },
+        reviewId: {
+          type: Schema.Types.ObjectId,
+          ref: "reviews",
+          required: true,
+        },
       },
     ],
     rating: {
@@ -44,6 +51,10 @@ const productSchema = new Schema(
     ],
     specifications: {
       type: {},
+    },
+    category: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
