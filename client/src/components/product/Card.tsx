@@ -87,7 +87,12 @@ export default function Card({
           {" "}
           ₹{orignalprice}{" "}
         </p>
-        <p>{(orignalprice - discountedPrice) / 100}% off</p>
+        <p>
+          {(((orignalprice - discountedPrice) * 100) / discountedPrice).toFixed(
+            0
+          )}
+          % off
+        </p>
       </div>
     </div>
   );

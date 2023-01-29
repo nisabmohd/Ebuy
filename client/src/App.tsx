@@ -3,6 +3,7 @@ import { Route, Routes, useParams } from "react-router-dom";
 import Navigation from "./components/navbar/Navigation";
 import Login from "./pages/Login";
 import Product from "./pages/Product";
+import Products from "./pages/Products";
 import Signup from "./pages/Signup";
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
         }}
       >
         <Routes>
-          <Route path="/products" element={<Product />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
