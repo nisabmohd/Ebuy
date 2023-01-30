@@ -4,6 +4,7 @@ import {
   deleteProduct,
   deleteReview,
   getProduct,
+  getReviewsOfProduct,
   reviewProduct,
   updateProduct,
   updateReview,
@@ -18,6 +19,8 @@ router
   .get(getProduct)
   .put(isAuthenticated, isAdmin, updateProduct)
   .delete(isAuthenticated, isAdmin, deleteProduct);
+
+router.route("/reviews/:id").get(getReviewsOfProduct);
 
 router
   .route("/review/:id")

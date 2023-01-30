@@ -1,16 +1,32 @@
-import { Rating } from "@mui/material";
+import { ListItem, Rating } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+import Review from "../components/product/Review";
 import { http } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
 export default function Product() {
   const { id } = useParams();
+  const [productFetched, setProductFetched] = useState(false);
+
   const { data, isLoading, error } = useQuery({
     queryFn: () => http.get(`${url}/product/${id}`),
     queryKey: ["product", id],
+    onSuccess: () => {
+      setProductFetched(true);
+    },
   });
-  console.log(data);
+  const {
+    data: reviews,
+    isLoading: LoadingReviews,
+    error: errReviews,
+  } = useQuery({
+    queryFn: () => http.get(`${url}/product/reviews/${id}`),
+    queryKey: ["reviews", id],
+    enabled: !productFetched,
+  });
+  console.log(reviews);
   if (error) return "something went wrong";
   if (isLoading) return "Loading";
   return (
@@ -31,9 +47,10 @@ export default function Product() {
           alignItems: "flex-start",
           marginTop: "8px",
           justifyContent: "space-between",
+          position: "static",
         }}
       >
-        <div className="left_div_product">
+        <div className="left_div_product" style={{ position: "absolute" }}>
           <div
             className="sameline"
             style={{
@@ -61,7 +78,7 @@ export default function Product() {
             </div>
             <div className="selectedImage" style={{ margin: "0 2%" }}>
               <img
-                style={{ width: "500px", marginLeft: "-22px" }}
+                style={{ width: "400px", marginLeft: "-8px" }}
                 src={data?.data.colors[0].images[0]}
                 alt=""
               />
@@ -74,7 +91,7 @@ export default function Product() {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              marginTop: "5vh",
+              marginTop: "8vh",
             }}
           >
             <button
@@ -111,7 +128,10 @@ export default function Product() {
           </div>
         </div>
 
-        <div className="product_details" style={{ width: "50%" }}>
+        <div
+          className="product_details"
+          style={{ width: "50%", marginLeft: "auto" }}
+        >
           <div className="name">
             <h2 style={{ lineHeight: "32px" }}>{data?.data.name}</h2>
             <p style={{ marginTop: "8px", fontWeight: "bold", color: "gray" }}>
@@ -172,12 +192,17 @@ export default function Product() {
                 marginTop: "10px",
               }}
             >
-              {data?.data.colors.map(
+              {data?.data.colors?.map(
                 (color: { color: string; images: string[]; _id: string }) => {
                   return (
                     <div key={color._id}>
                       <img
-                        style={{ width: "55px" }}
+                        style={{
+                          width: "55px",
+                          border: "1px solid #e5e5e5",
+                          borderRadius: "5px",
+                          marginBottom: "8px",
+                        }}
                         src={color.images[0]}
                         alt=""
                       />
@@ -216,6 +241,52 @@ export default function Product() {
                 );
               })}
             </ul>
+          </div>
+          <div className="highlightedImages" style={{ marginTop: "20px" }}>
+            {data?.data.highlightedImages?.map((item: string) => {
+              return (
+                <img
+                  style={{
+                    width: "100%",
+                    margin: "auto",
+                    marginTop: "15px",
+                    borderRadius: "15px",
+                  }}
+                  src={item}
+                  alt=""
+                />
+              );
+            })}
+          </div>
+          <div className="ratings_view" style={{ marginTop: "35px" }}>
+            <h3 style={{ marginBottom: "20px" }}>Reviews</h3>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "18px",
+              }}
+            >
+              {reviews?.data?.map(
+                (item: {
+                  comment: string;
+                  images: string[];
+                  _id: string;
+                  userId: string;
+                  updatedAt: string;
+                  rating: number;
+                }) => (
+                  <Review
+                    comment={item.comment}
+                    images={item.images}
+                    userId={item.userId}
+                    timestamp={item.updatedAt}
+                    rating={item.rating}
+                    key={item._id}
+                  />
+                )
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -12,6 +12,17 @@ export const getProduct = asyncHandler(async (req, res, next) => {
   res.json(product);
 });
 
+export const getReviewsOfProduct = asyncHandler(async (req, res, next) => {
+  const product = await Product.findOne({ _id: req.params.id });
+  if (!product) throw new ServerError("No products found", 404);
+  const reviews = await Promise.all(
+    product.reviews.map(
+      async (item) => await Review.findOne({ _id: item.reviewId })
+    )
+  );
+  res.send(reviews);
+});
+
 // User
 //------
 export const reviewProduct = asyncHandler(async (req, res, next) => {
