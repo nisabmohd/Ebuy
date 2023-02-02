@@ -52,9 +52,16 @@ const productSchema = new Schema(
     specifications: {
       type: {},
     },
-    category: {
+    category: [
+      {
+        type: String,
+      },
+    ],
+    query: [{ type: String }],
+    sex: {
       type: String,
-      required: true,
+      enum: ["MALE", "FEMALE", "NONE"],
+      default: "NONE",
     },
   },
   { timestamps: true }

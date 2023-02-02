@@ -1,5 +1,16 @@
 import React from "react";
-
+const CATEGORIES = [
+  {
+    id: 1,
+    category: "Mobile",
+    url: "mobile",
+  },
+  {
+    id: 1,
+    category: "Fashion",
+    url: "fashion",
+  },
+];
 export default function SubNav() {
   return (
     <div

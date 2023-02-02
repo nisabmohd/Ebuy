@@ -33,7 +33,6 @@ export default function Product() {
   function handleChangeColor(index: number) {
     setColorIndex(index);
   }
-  console.log(reviews);
   if (error) return <Error />;
   if (isLoading) return <Loader />;
   return (
@@ -222,13 +221,15 @@ export default function Product() {
                               ? "2px solid rgb(254, 189, 105)"
                               : "1px solid #e5e5e5",
                           borderRadius: "5px",
-                          marginBottom: "8px",
+                          marginBottom: "5px",
                           cursor: "pointer",
                         }}
                         src={color.images[0]}
                         alt=""
                       />
-                      <p style={{ fontSize: "12.5px" }}>{color.color}</p>
+                      <p style={{ fontSize: "12.5px", textAlign: "center" }}>
+                        {color.color}
+                      </p>
                     </div>
                   );
                 }

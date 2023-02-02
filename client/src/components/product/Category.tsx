@@ -8,28 +8,49 @@ const SORT_BY = [
   {
     id: 1,
     text: "Relevance",
+    query: "relevance",
   },
   {
     id: 2,
     text: "Popularity",
+    query: "popularity",
   },
   {
     id: 3,
     text: "Price - Low to High",
+    query: "lowtohigh",
   },
   {
     id: 4,
     text: "Price - High to Low",
+    query: "hightolow",
   },
   {
     id: 5,
     text: "Newest First",
+    query: "newestfirst",
   },
 ];
 
 const DEFAULT_RATINGS = [1, 2, 3, 4];
 
-export default function Category() {
+type CategoryProp = {
+  handleCustomisation: (param: {
+    sortby?: string;
+    ratings?: number;
+    price?: { low?: number; high?: number };
+  }) => void;
+  sortby: string | null;
+  ratings: number | null;
+  price: { low?: number; high?: number };
+};
+
+export default function Category({
+  handleCustomisation,
+  sortby,
+  ratings,
+  price,
+}: CategoryProp) {
   return (
     <div style={{ width: "300px", marginRight: "1.8vw", paddingTop: "24px" }}>
       <div className="sortby">
@@ -48,8 +69,23 @@ export default function Category() {
                 marginBottom: "-10px",
               }}
             >
-              <Checkbox />
-              <p style={{ fontSize: "14px" }}>{item.text}</p>
+              <Checkbox
+                checked={sortby != null && item.query === sortby}
+                onChange={(e) =>
+                  handleCustomisation({
+                    sortby: e.target.checked ? item.query : "-1",
+                  })
+                }
+              />
+              <p
+                style={{
+                  fontSize: "14px",
+                  fontWeight:
+                    sortby != null && item.query === sortby ? "bold" : "normal",
+                }}
+              >
+                {item.text}
+              </p>
             </div>
           );
         })}
@@ -69,15 +105,29 @@ export default function Category() {
           {DEFAULT_RATINGS.map((item, index) => {
             return (
               <div
+                onClick={() =>
+                  handleCustomisation({ ratings: ratings == item ? -1 : item })
+                }
+                key={item}
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   gap: "5px",
+                  cursor: "pointer",
                   marginLeft: "8px",
                 }}
               >
                 <Rating key={index} value={item} size="small" readOnly={true} />
-                {<p style={{ fontSize: "14px" }}>& above</p>}
+                {
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: ratings == item ? "bold" : "normal",
+                    }}
+                  >
+                    & above
+                  </p>
+                }
               </div>
             );
           })}
@@ -109,8 +159,15 @@ export default function Category() {
             size="small"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={500}
-            // onChange={handleChange}
+            value={price.low}
+            onChange={(e) =>
+              handleCustomisation({
+                price: {
+                  low: parseInt(e.target.value as string),
+                  high: price.high,
+                },
+              })
+            }
           >
             <MenuItem style={{ fontSize: "14px" }} value={500}>
               ₹500
@@ -128,8 +185,15 @@ export default function Category() {
             size="small"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={10000}
-            // onChange={handleChange}
+            value={price.high}
+            onChange={(e) =>
+              handleCustomisation({
+                price: {
+                  high: parseInt(e.target.value as string),
+                  low: price.low,
+                },
+              })
+            }
           >
             <MenuItem style={{ fontSize: "14px" }} value={10000}>
               ₹10000

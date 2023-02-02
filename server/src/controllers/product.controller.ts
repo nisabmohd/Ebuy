@@ -23,6 +23,8 @@ export const getReviewsOfProduct = asyncHandler(async (req, res, next) => {
   res.send(reviews);
 });
 
+export const getProducts = asyncHandler(async (req, res, next) => {});
+
 // User
 //------
 export const reviewProduct = asyncHandler(async (req, res, next) => {
@@ -106,11 +108,6 @@ export const deleteReview = asyncHandler(async (req, res, next) => {
     { reviews: { $pull: { review: review._id } } }
   );
   res.json({ message: "deleted" });
-});
-
-export const getProducts = asyncHandler(async (req, res, next) => {
-  const products = await Product.findOne(req.body);
-  res.json(products);
 });
 
 // Admin

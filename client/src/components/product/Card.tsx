@@ -1,4 +1,5 @@
 import { Rating } from "@mui/material";
+import { Link } from "react-router-dom";
 
 type cardprops = {
   productId: string;
@@ -20,13 +21,16 @@ export default function Card({
   productId,
 }: cardprops) {
   return (
-    <div
+    <Link
+      to={`/product/${productId}`}
       style={{
         width: "300px",
         height: "450px",
         border: "1px solid #f0f0f0",
         borderRadius: "4px",
         textAlign: "center",
+        textDecoration: "none",
+        color: "inherit",
       }}
     >
       <div className="image" style={{ height: "320px" }}>
@@ -94,6 +98,6 @@ export default function Card({
           % off
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

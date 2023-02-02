@@ -1,5 +1,13 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import searchIcon from "../../assets/search.png";
 export default function Search() {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+  function handleNavigate() {
+    if (!query) return;
+    navigate(`/products?search=${query}`);
+  }
   return (
     <div
       style={{
@@ -15,6 +23,9 @@ export default function Search() {
       }}
     >
       <input
+        onKeyDown={(e) => e.keyCode == 13 && handleNavigate()}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
         type="text"
         placeholder="Search products"
         style={{
@@ -29,6 +40,7 @@ export default function Search() {
         }}
       />
       <div
+        onClick={() => handleNavigate()}
         className="searchicon"
         style={{
           backgroundColor: "#febd69",
@@ -38,6 +50,7 @@ export default function Search() {
           alignItems: "center",
           justifyContent: "center",
           padding: "0 12px",
+          cursor: query ? "pointer" : "not-allowed",
         }}
       >
         <img style={{ width: "18px" }} src={searchIcon} alt="" />
