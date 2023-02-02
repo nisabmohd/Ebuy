@@ -6,15 +6,21 @@ type ReviewProps = {
   userId: string;
   timestamp: string;
   rating: number;
+  username: string;
 };
 
-export default function Review({ comment, images, rating }: ReviewProps) {
+export default function Review({
+  comment,
+  images,
+  rating,
+  username,
+}: ReviewProps) {
   return (
     <div
       style={{
-        backgroundColor: "#fafafa",
         borderRadius: "16px",
-        padding: "25px 0",
+        padding: "28px 14px",
+        backgroundColor: "rgb(250 250 250)",
       }}
     >
       <div
@@ -22,8 +28,8 @@ export default function Review({ comment, images, rating }: ReviewProps) {
         style={{
           gap: "10px",
           marginBottom: "3px",
-          marginLeft: "18px",
-          marginTop: "-9px",
+          marginLeft: "2px",
+          marginTop: "-1px",
         }}
       >
         <Avatar sx={{ width: 32, height: 32 }} />
@@ -35,22 +41,22 @@ export default function Review({ comment, images, rating }: ReviewProps) {
             fontFamily: "Poppins",
           }}
         >
-          Nisab Mohd
+          {username}
         </p>
       </div>
 
       <Rating
         value={rating}
         size="small"
-        sx={{ marginLeft: "18px", marginTop: "4px" }}
+        sx={{ marginLeft: "4px", marginTop: "4px" }}
         readOnly
       />
       <p
         style={{
           fontSize: "13px",
           marginTop: "8px",
-          width: "90%",
-          marginLeft: "18px",
+          width: "98%",
+          marginLeft: "5px",
           color: "#3a3a3a",
           fontFamily: "Poppins",
         }}
@@ -64,7 +70,7 @@ export default function Review({ comment, images, rating }: ReviewProps) {
           flexDirection: "row",
           alignItems: "center",
           gap: "12px",
-          marginLeft: "18px",
+          marginLeft: "5px",
           marginTop: "14px",
         }}
       >

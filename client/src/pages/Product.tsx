@@ -1,7 +1,9 @@
-import { ListItem, Rating } from "@mui/material";
+import { Rating } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import Error from "../components/Error";
+import Loader from "../components/Loader";
 import Review from "../components/product/Review";
 import { http } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
@@ -9,14 +11,16 @@ import { url } from "../url";
 export default function Product() {
   const { id } = useParams();
   const [productFetched, setProductFetched] = useState(false);
-
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [colorIndex, setColorIndex] = useState<number>(0);
   const { data, isLoading, error } = useQuery({
     queryFn: () => http.get(`${url}/product/${id}`),
     queryKey: ["product", id],
-    onSuccess: () => {
+    onSuccess: (res) => {
       setProductFetched(true);
     },
   });
+
   const {
     data: reviews,
     isLoading: LoadingReviews,
@@ -26,9 +30,12 @@ export default function Product() {
     queryKey: ["reviews", id],
     enabled: !productFetched,
   });
+  function handleChangeColor(index: number) {
+    setColorIndex(index);
+  }
   console.log(reviews);
-  if (error) return "something went wrong";
-  if (isLoading) return "Loading";
+  if (error) return <Error />;
+  if (isLoading) return <Loader />;
   return (
     <div
       style={{
@@ -52,7 +59,7 @@ export default function Product() {
       >
         <div className="left_div_product" style={{ position: "absolute" }}>
           <div
-            className="sameline"
+            className="sameline_"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -63,23 +70,30 @@ export default function Product() {
               className="imageList"
               style={{ display: "flex", flexDirection: "column", gap: "15px" }}
             >
-              {data?.data.colors[0].images.map((img: string) => (
-                <img
-                  key={img}
-                  src={img}
-                  alt=""
-                  style={{
-                    width: "50px",
-                    border: "1px solid #e5e5e5",
-                    borderRadius: "5px",
-                  }}
-                />
-              ))}
+              {data?.data.colors[colorIndex].images.map(
+                (img: string, index: number) => (
+                  <img
+                    key={img}
+                    src={img}
+                    alt=""
+                    onClick={() => setSelectedImageIndex(index)}
+                    style={{
+                      width: "50px",
+                      border:
+                        selectedImageIndex === index
+                          ? "2px solid rgb(254, 189, 105)"
+                          : "1px solid #e5e5e5",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  />
+                )
+              )}
             </div>
             <div className="selectedImage" style={{ margin: "0 2%" }}>
               <img
                 style={{ width: "400px", marginLeft: "-8px" }}
-                src={data?.data.colors[0].images[0]}
+                src={data?.data.colors[colorIndex].images[selectedImageIndex]}
                 alt=""
               />
             </div>
@@ -193,15 +207,23 @@ export default function Product() {
               }}
             >
               {data?.data.colors?.map(
-                (color: { color: string; images: string[]; _id: string }) => {
+                (
+                  color: { color: string; images: string[]; _id: string },
+                  index: number
+                ) => {
                   return (
                     <div key={color._id}>
                       <img
+                        onClick={() => handleChangeColor(index)}
                         style={{
                           width: "55px",
-                          border: "1px solid #e5e5e5",
+                          border:
+                            colorIndex == index
+                              ? "2px solid rgb(254, 189, 105)"
+                              : "1px solid #e5e5e5",
                           borderRadius: "5px",
                           marginBottom: "8px",
+                          cursor: "pointer",
                         }}
                         src={color.images[0]}
                         alt=""
@@ -252,6 +274,7 @@ export default function Product() {
                     marginTop: "15px",
                     borderRadius: "15px",
                   }}
+                  key={item}
                   src={item}
                   alt=""
                 />
@@ -259,7 +282,9 @@ export default function Product() {
             })}
           </div>
           <div className="ratings_view" style={{ marginTop: "35px" }}>
-            <h3 style={{ marginBottom: "20px" }}>Reviews</h3>
+            {reviews?.data.length != 0 && (
+              <h3 style={{ marginBottom: "20px" }}>Reviews</h3>
+            )}
             <div
               style={{
                 display: "flex",
@@ -274,6 +299,7 @@ export default function Product() {
                   _id: string;
                   userId: string;
                   updatedAt: string;
+                  username: string;
                   rating: number;
                 }) => (
                   <Review
@@ -283,6 +309,7 @@ export default function Product() {
                     timestamp={item.updatedAt}
                     rating={item.rating}
                     key={item._id}
+                    username={item.username}
                   />
                 )
               )}

@@ -28,11 +28,13 @@ export const getReviewsOfProduct = asyncHandler(async (req, res, next) => {
 export const reviewProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { userId } = req;
+  const user = await User.findOne({ _id: userId });
   const product = await Product.findOne({ _id: id });
   if (!product) throw new ServerError("No products found", 404);
   const review = await new Review({
     userId,
     productId: id,
+    username: user!.firstname,
     ...req.body,
   }).save();
   const reviewed = await Product.updateOne(
