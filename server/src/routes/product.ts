@@ -4,6 +4,7 @@ import {
   deleteProduct,
   deleteReview,
   getProduct,
+  getProducts,
   getReviewsOfProduct,
   reviewProduct,
   updateProduct,
@@ -13,6 +14,8 @@ import { isAdmin, isAuthenticated } from "../middlewares/auth";
 const router = express.Router();
 
 router.route("/new").post(isAuthenticated, isAdmin, createProduct);
+
+router.route("/query").post(getProducts);
 
 router
   .route("/:id")

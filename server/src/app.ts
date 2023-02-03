@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 const app = express();
 import cors from "cors";
 import { logger } from "./middlewares/logger";
+import env from "./utils/envalid";
 
 declare global {
   namespace Express {
@@ -18,7 +19,7 @@ declare global {
 app.use(express.json());
 app.use(cors());
 
-app.use(logger);
+if (!env.DEV) app.use(logger);
 
 app.get("/test", (req, res) => {
   res.send("Hello from server side");

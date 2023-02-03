@@ -23,7 +23,66 @@ export const getReviewsOfProduct = asyncHandler(async (req, res, next) => {
   res.send(reviews);
 });
 
-export const getProducts = asyncHandler(async (req, res, next) => {});
+export const getProducts = asyncHandler(async (req, res, next) => {
+  let {
+    category,
+    page,
+    sortby,
+    ratings,
+    low,
+    high,
+    search,
+    limit = 1,
+  } = req.body;
+  page = page ? page - 1 : 0;
+  const getQuery = () => {
+    let query = Product.find({
+      query: { $in: search as string },
+      category: {
+        $in: category ? (category as string).split("-") : [search as string],
+      },
+      rating: { $gte: ratings ? parseInt(ratings as string) : 0 },
+      discountedPrice: {
+        $gte: low ? parseInt(low as string) : 0,
+        $lte: high ? parseInt(high as string) : 1000000,
+      },
+    });
+    if (sortby === "lowtohigh")
+      query = query.sort({
+        originalPrice: 1,
+      });
+    if (sortby === "hightolow")
+      query = query.sort({
+        originalPrice: -1,
+      });
+    if (sortby === "newestfirst") {
+      query = query.sort({ updatedAt: -1 });
+    }
+    if (sortby === "popularity") {
+      query = query.sort({ ratings: 1 });
+    }
+    return query;
+  };
+  const result: any = {};
+  const total = await getQuery().countDocuments();
+  result.total = total;
+  const startIndex = page * limit;
+  const endIndex = (page + 1) * limit;
+  if (startIndex > 0) {
+    result.previous = {
+      pageNumber: page - 1,
+      limit: limit,
+    };
+  }
+  if (endIndex < total) {
+    result.next = {
+      pageNumber: page + 1,
+      limit: limit,
+    };
+  }
+  result.data = await getQuery().limit(limit).skip(startIndex);
+  res.json(result);
+});
 
 // User
 //------

@@ -39,6 +39,7 @@ type CategoryProp = {
     sortby?: string;
     ratings?: number;
     price?: { low?: number; high?: number };
+    page?: number;
   }) => void;
   sortby: string | null;
   ratings: number | null;
@@ -74,6 +75,7 @@ export default function Category({
                 onChange={(e) =>
                   handleCustomisation({
                     sortby: e.target.checked ? item.query : "-1",
+                    page: 1,
                   })
                 }
               />
@@ -106,7 +108,10 @@ export default function Category({
             return (
               <div
                 onClick={() =>
-                  handleCustomisation({ ratings: ratings == item ? -1 : item })
+                  handleCustomisation({
+                    ratings: ratings == item ? -1 : item,
+                    page: 1,
+                  })
                 }
                 key={item}
                 style={{
@@ -166,6 +171,7 @@ export default function Category({
                   low: parseInt(e.target.value as string),
                   high: price.high,
                 },
+                page: 1,
               })
             }
           >
@@ -192,6 +198,7 @@ export default function Category({
                   high: parseInt(e.target.value as string),
                   low: price.low,
                 },
+                page: 1,
               })
             }
           >
