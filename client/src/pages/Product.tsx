@@ -33,7 +33,7 @@ export default function Product() {
   function handleChangeColor(index: number) {
     setColorIndex(index);
   }
-  if (error) return <Error />;
+  if (error) return <Error message="Something went wrong" />;
   if (isLoading) return <Loader />;
   return (
     <div

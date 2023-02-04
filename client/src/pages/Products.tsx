@@ -28,7 +28,7 @@ export default function Products() {
     query.get("page") ? parseInt(query.get("page")!) : 1
   );
   const navigate = useNavigate();
-
+  console.log(url);
   useEffect(() => {
     setProducts([]);
   }, [query]);
