@@ -63,6 +63,7 @@ const productSchema = new Schema(
       enum: ["MALE", "FEMALE", "NONE"],
       default: "NONE",
     },
+    sizes: [{ type: Number }],
   },
   { timestamps: true }
 );

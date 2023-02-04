@@ -36,17 +36,37 @@ export const getProducts = asyncHandler(async (req, res, next) => {
   } = req.body;
   page = page ? page - 1 : 0;
   const getQuery = () => {
-    let query = Product.find({
-      query: { $in: search as string },
-      category: {
-        $in: category ? (category as string).split("-") : [search as string],
-      },
-      rating: { $gte: ratings ? parseInt(ratings as string) : 0 },
-      discountedPrice: {
-        $gte: low ? parseInt(low as string) : 0,
-        $lte: high ? parseInt(high as string) : 1000000,
-      },
-    });
+    let query;
+    if (category) {
+      const categoryArray = (category as string)
+        .split("-")
+        .map((item: string) => new RegExp(item, "i"));
+      query = Product.find({
+        category: {
+          $in: categoryArray,
+        },
+        rating: { $gte: ratings ? parseInt(ratings as string) : 0 },
+        discountedPrice: {
+          $gte: low ? parseInt(low as string) : 0,
+          $lte: high ? parseInt(high as string) : 1000000,
+        },
+      });
+    } else {
+      const searchArray = [search as string].map(
+        (item: string) => new RegExp(item, "i")
+      );
+      query = Product.find({
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { query: { $in: searchArray } },
+        ],
+        rating: { $gte: ratings ? parseInt(ratings as string) : 0 },
+        discountedPrice: {
+          $gte: low ? parseInt(low as string) : 0,
+          $lte: high ? parseInt(high as string) : 1000000,
+        },
+      });
+    }
     if (sortby === "lowtohigh")
       query = query.sort({
         originalPrice: 1,

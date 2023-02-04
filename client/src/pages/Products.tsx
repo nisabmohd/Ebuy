@@ -41,6 +41,7 @@ export default function Products() {
         high: query.get("high"),
         ratings: query.get("ratings"),
         sortby: query.get("sortby"),
+        search: query.get("search"),
         page: query.get("page") ?? 1,
       }),
     queryKey: [
@@ -140,7 +141,10 @@ export default function Products() {
       />
       <div className="right" style={{ width: "100%" }}>
         {isLoading && query.get("category") != undefined && <Loader />}
-        {isError && <Error />}
+        {isError && <Error message="Something went wrong" />}
+        {!isError && !isLoading && products.length == 0 && (
+          <Error message="No products found" code={404} />
+        )}
         {products.length != 0 && (
           <>
             <h3 style={{ margin: "15px 0 " }}>RESULTS</h3>

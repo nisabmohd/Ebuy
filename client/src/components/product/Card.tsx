@@ -36,10 +36,10 @@ export default function Card({
       <div className="image" style={{ height: "320px" }}>
         <img
           style={{
-            maxWidth: "90%",
+            width: "100%",
             margin: "auto",
-            marginTop: "15px",
-            maxHeight: "300px",
+            maxHeight: "310px",
+            objectFit: "cover",
           }}
           src={image}
           alt=""

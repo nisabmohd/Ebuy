@@ -1,4 +1,5 @@
-import React from "react";
+import { Link } from "react-router-dom";
+
 const CATEGORIES = [
   {
     id: 1,
@@ -6,9 +7,29 @@ const CATEGORIES = [
     url: "mobile",
   },
   {
-    id: 1,
+    id: 2,
     category: "Fashion",
     url: "fashion",
+  },
+  {
+    id: 3,
+    category: "Electronics",
+    url: "electronics",
+  },
+  {
+    id: 4,
+    category: "Groceries",
+    url: "groceries",
+  },
+  {
+    id: 5,
+    category: "Home",
+    url: "home",
+  },
+  {
+    id: 6,
+    category: "Appliance",
+    url: "appliance",
   },
 ];
 export default function SubNav() {
@@ -26,16 +47,17 @@ export default function SubNav() {
         gap: "25px",
         fontSize: "14px",
         fontWeight: "bold",
+        paddingLeft: "28px",
       }}
     >
-      <p style={{ marginLeft: "28px" }}>Groceries</p>
-      <p>Mobile</p>
-      <p>Fashion</p>
-      <p>Electronics</p>
-      <p>Home</p>
-      <p>Appliances</p>
-      <p></p>
-      <p></p>
+      {CATEGORIES.map((category) => (
+        <Link
+          to={`/products?category=${category.url}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {category.category}
+        </Link>
+      ))}
     </div>
   );
 }

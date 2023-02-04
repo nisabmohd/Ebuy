@@ -1,6 +1,13 @@
 import React from "react";
 import dangericon from "../assets/warning.png";
-export default function Error() {
+import error404 from "../assets/error-404.png";
+export default function Error({
+  code,
+  message,
+}: {
+  message: string;
+  code?: 404;
+}) {
   return (
     <div
       style={{
@@ -13,8 +20,12 @@ export default function Error() {
         paddingTop: "3vh",
       }}
     >
-      <img style={{ width: "55px" }} src={dangericon} alt="" />
-      <h4>Something went wrong</h4>
+      <img
+        style={{ width: "55px", marginBottom: code ? "15px" : 0 }}
+        src={code ? error404 : dangericon}
+        alt=""
+      />
+      <h4>{message}</h4>
     </div>
   );
 }
