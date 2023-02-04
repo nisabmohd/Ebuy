@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import logoblack from "../../assets/logo_black.png";
 
@@ -8,13 +9,16 @@ type LogoProps = {
 
 export default function Logo({ black = false, large = false }: LogoProps) {
   return (
-    <div
+    <Link
+      to="/"
       className="logo"
       style={{
         marginLeft: "1vw",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        textDecoration: "none",
+        color: "inherit",
       }}
     >
       <img
@@ -25,6 +29,6 @@ export default function Logo({ black = false, large = false }: LogoProps) {
       <p style={{ fontSize: large ? "22px" : "22px", fontWeight: "bold" }}>
         Ebuy &nbsp;
       </p>
-    </div>
+    </Link>
   );
 }

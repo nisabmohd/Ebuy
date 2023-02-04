@@ -32,7 +32,8 @@ const CATEGORIES = [
       { id: 32, category: "Laptops", url: "electronics-laptops" },
       { id: 33, category: "Computers", url: "electronics-computers" },
       { id: 34, category: "Tablets", url: "electronics-tablets" },
-      { id: 35, category: "Others", url: "electronics-others" },
+      { id: 35, category: "Audio", url: "electronics-audio" },
+      { id: 36, category: "Others", url: "electronics-others" },
     ],
   },
   {
