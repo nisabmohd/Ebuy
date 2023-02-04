@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+import { Menu, MenuItem } from "@mui/material";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const CATEGORIES = [
   {
@@ -9,12 +12,28 @@ const CATEGORIES = [
   {
     id: 2,
     category: "Fashion",
-    url: "fashion",
+    categories: [
+      { id: 21, category: "Mens Shirts/T-shirts", url: "fashion-men-shirts" },
+      { id: 22, category: "Mens Pants", url: "fashion-men-pants" },
+      { id: 23, category: "Mens Footwears", url: "fashion-men-footwears" },
+      { id: 24, category: "Mens Misc", url: "fashion-men-misc" },
+      { id: 25, category: "Womens Tops", url: "fashion-women-shirts" },
+      { id: 26, category: "Womens Pants", url: "fashion-women-pants" },
+      { id: 27, category: "Makeups", url: "fashion-women-makeups" },
+      { id: 28, category: "Women Footwears", url: "fashion-women-footwears" },
+      { id: 29, category: "Womens Misc", url: "fashion-women-misc" },
+    ],
   },
   {
     id: 3,
     category: "Electronics",
-    url: "electronics",
+    categories: [
+      { id: 21, category: "TV/Monitors", url: "electronics-tv-monitor" },
+      { id: 22, category: "Laptops", url: "electronics-laptops" },
+      { id: 23, category: "Computers", url: "electronics-computers" },
+      { id: 24, category: "Tablets", url: "electronics-tablets" },
+      { id: 25, category: "Others", url: "electronics-others" },
+    ],
   },
   {
     id: 4,
@@ -33,31 +52,101 @@ const CATEGORIES = [
   },
 ];
 export default function SubNav() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  const open = Boolean(anchorEl);
+  const [dropdown, setDropdoen] = useState<number>(-1);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div
       style={{
         height: "32px",
         width: "100%",
         backgroundColor: "#232f3e",
-        color: "white",
         display: "flex",
         flexDirection: "row",
         textAlign: "center",
         alignItems: "center",
-        gap: "25px",
-        fontSize: "14px",
-        fontWeight: "bold",
-        paddingLeft: "28px",
       }}
     >
-      {CATEGORIES.map((category) => (
-        <Link
-          to={`/products?category=${category.url}`}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          {category.category}
-        </Link>
-      ))}
+      <div
+        style={{
+          marginLeft: "34px",
+          display: "flex",
+          flexDirection: "row",
+          textAlign: "center",
+          alignItems: "center",
+          gap: "25px",
+          fontSize: "13.5px",
+          fontWeight: "bold",
+          color: "white",
+        }}
+      >
+        {CATEGORIES.map((category) => (
+          <div>
+            {typeof category.categories === "object" ? (
+              <>
+                <div
+                  onClick={(e) => {
+                    setDropdoen(category.id);
+                    handleClick(e);
+                  }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  <p>{category.category}</p>
+                  <ArrowDropDownIcon />
+                </div>
+                <Menu
+                  key={category.id}
+                  PaperProps={{ sx: { width: "200px" } }}
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={dropdown == category.id && open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  {category.categories.map((item) => (
+                    <MenuItem
+                      style={{
+                        fontFamily: "Rubik",
+                        fontSize: "13px",
+                        color: "#3e3e3e",
+                        fontWeight: "bold",
+                      }}
+                      key={item.id}
+                      onClick={() => {
+                        handleClose();
+                        navigate(`products?category=${item.url}`);
+                      }}
+                    >
+                      {item.category}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            ) : (
+              <Link
+                to={`/products?category=${category.url}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                {category.category}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

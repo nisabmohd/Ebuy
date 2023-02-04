@@ -56,7 +56,7 @@ export default function Product() {
           position: "static",
         }}
       >
-        <div className="left_div_product" style={{ position: "absolute" }}>
+        <div className="left_div_product" style={{}}>
           <div
             className="sameline_"
             style={{
@@ -195,7 +195,7 @@ export default function Product() {
               marginTop: "28px",
             }}
           >
-            <h5>Colour : Z20 Black</h5>
+            <h5>Colour : {data?.data.colors[0]?.color}</h5>
             <div
               style={{
                 display: "flex",

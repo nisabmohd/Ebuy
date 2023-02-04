@@ -33,7 +33,15 @@ export default function Card({
         color: "inherit",
       }}
     >
-      <div className="image" style={{ height: "320px" }}>
+      <div
+        className="image"
+        style={{
+          height: "320px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <img
           style={{
             width: "100%",
@@ -68,9 +76,15 @@ export default function Card({
           justifyContent: "center",
         }}
       >
-        <p style={{ fontSize: "14px" }}>{ratings}</p>
-        <Rating size="small" name="read-only" value={ratings} readOnly />
-        <p style={{ color: "#538193", fontSize: "14px" }}>({reviewCount})</p>
+        {ratings != 0 && (
+          <>
+            <p style={{ fontSize: "14px" }}>{ratings}</p>
+            <Rating size="small" name="read-only" value={ratings} readOnly />
+          </>
+        )}
+        {reviewCount != 0 && (
+          <p style={{ color: "#538193", fontSize: "14px" }}>({reviewCount})</p>
+        )}
       </div>
       <div
         className="price"

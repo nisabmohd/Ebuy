@@ -43,7 +43,7 @@ export const getProducts = asyncHandler(async (req, res, next) => {
         .map((item: string) => new RegExp(item, "i"));
       query = Product.find({
         category: {
-          $in: categoryArray,
+          $all: categoryArray,
         },
         rating: { $gte: ratings ? parseInt(ratings as string) : 0 },
         discountedPrice: {
