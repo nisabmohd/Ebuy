@@ -28,12 +28,11 @@ export default function Products() {
     query.get("page") ? parseInt(query.get("page")!) : 1
   );
   const navigate = useNavigate();
-  console.log(url);
   useEffect(() => {
     setProducts([]);
   }, [query]);
 
-  const { isError, isLoading } = useQuery({
+  const { isError = false, isLoading = true } = useQuery({
     queryFn: () =>
       axios.post(`${url}/product/query`, {
         category: query.get("category"),
@@ -56,7 +55,6 @@ export default function Products() {
       query.get("high"),
     ],
     onSuccess(res) {
-      // console.log(res.data);
       setPaginate({
         total: res.data.total,
         next: res.data.next,
