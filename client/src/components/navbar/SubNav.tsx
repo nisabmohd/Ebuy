@@ -28,11 +28,11 @@ const CATEGORIES = [
     id: 3,
     category: "Electronics",
     categories: [
-      { id: 21, category: "TV/Monitors", url: "electronics-tv-monitor" },
-      { id: 22, category: "Laptops", url: "electronics-laptops" },
-      { id: 23, category: "Computers", url: "electronics-computers" },
-      { id: 24, category: "Tablets", url: "electronics-tablets" },
-      { id: 25, category: "Others", url: "electronics-others" },
+      { id: 31, category: "TV/Monitors", url: "electronics-tv-monitor" },
+      { id: 32, category: "Laptops", url: "electronics-laptops" },
+      { id: 33, category: "Computers", url: "electronics-computers" },
+      { id: 34, category: "Tablets", url: "electronics-tablets" },
+      { id: 35, category: "Others", url: "electronics-others" },
     ],
   },
   {
@@ -88,10 +88,11 @@ export default function SubNav() {
         }}
       >
         {CATEGORIES.map((category) => (
-          <div>
+          <div key={category.id}>
             {typeof category.categories === "object" ? (
               <>
                 <div
+                  key={category.categories.toString()}
                   onClick={(e) => {
                     setDropdoen(category.id);
                     handleClick(e);
@@ -138,6 +139,7 @@ export default function SubNav() {
               </>
             ) : (
               <Link
+                key={category.id}
                 to={`/products?category=${category.url}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >

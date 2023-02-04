@@ -236,6 +236,41 @@ export default function Product() {
               )}
             </div>
           </div>
+          {data?.data.sizes != undefined && (
+            <div style={{ marginTop: "22px" }}>
+              <h4 style={{ marginBottom: "12px" }}>Sizes</h4>
+              <div
+                className="sizes"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                {data?.data.sizes.map((size: number) => (
+                  <div
+                    key={size}
+                    style={{
+                      border: "1px solid gray",
+                      borderRadius: "6px",
+                      height: "25px",
+                      width: "25px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "12px",
+                      fontFamily: "Poppins",
+                      textAlign: "center",
+                    }}
+                  >
+                    {size}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="about" style={{ marginTop: "28px" }}>
             <h3>About this product</h3>
             <ul
