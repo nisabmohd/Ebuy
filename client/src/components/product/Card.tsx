@@ -1,5 +1,6 @@
 import { Rating } from "@mui/material";
 import { Link } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 type cardprops = {
   productId: string;
@@ -31,6 +32,7 @@ export default function Card({
         textAlign: "center",
         textDecoration: "none",
         color: "inherit",
+        position: "relative",
       }}
     >
       <div
@@ -52,6 +54,16 @@ export default function Card({
           src={image}
           alt=""
         />
+        {
+          <div
+            style={{ position: "absolute", top: "12px", right: "12px" }}
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <FavoriteIcon sx={{ color: "#beb7b7" }} />
+          </div>
+        }
       </div>
       <p
         style={{

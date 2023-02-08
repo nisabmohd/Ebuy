@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Product from "./pages/Product";
 import Products from "./pages/Products";
 import Signup from "./pages/Signup";
+import Private from "./routers/Private";
 
 function App() {
   const [hideNav] = useState(() => {
@@ -26,6 +27,14 @@ function App() {
         <Routes>
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route
+            path="/mywishlist"
+            element={
+              <Private>
+                <Login />
+              </Private>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

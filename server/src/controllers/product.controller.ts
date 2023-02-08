@@ -189,6 +189,17 @@ export const deleteReview = asyncHandler(async (req, res, next) => {
   res.json({ message: "deleted" });
 });
 
+export const addProductToWishList = asyncHandler(async (req, res, next) => {
+  const { productId } = req.query;
+  const updated = await User.updateOne(
+    { _id: req.userId },
+    { wishlists: { $push: productId } }
+  );
+  res.json({
+    succss: updated.modifiedCount == 1,
+  });
+});
+
 // Admin
 //--------
 export const updateProduct = asyncHandler(async (req, res, next) => {
