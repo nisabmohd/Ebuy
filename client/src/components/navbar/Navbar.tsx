@@ -4,6 +4,7 @@ import profileIcon from "../../assets/user.png";
 import heartIcon from "../../assets/heart.png";
 import style from "./navbar.module.css";
 import Logo from "./Logo";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -30,18 +31,30 @@ export default function Navbar() {
           marginRight: "1vw",
         }}
       >
-        <div className={style.tab}>
+        <Link
+          to="/mywishlist"
+          style={{ color: "inherit", textDecoration: "none" }}
+          className={style.tab}
+        >
           <img style={tabImgStyle} src={heartIcon} alt="" />
           <p>Wishlist</p>
-        </div>
-        <div className={style.tab}>
+        </Link>
+        <Link
+          to="/myprofile"
+          style={{ color: "inherit", textDecoration: "none" }}
+          className={style.tab}
+        >
           <img style={tabImgStyle} src={profileIcon} alt="" />
           <p>Profile</p>
-        </div>
-        <div className={style.tab}>
+        </Link>
+        <Link
+          to="/mycart"
+          style={{ color: "inherit", textDecoration: "none" }}
+          className={style.tab}
+        >
           <img style={tabImgStyle} src={cartIcon} alt="" />
           <p>Cart</p>
-        </div>
+        </Link>
       </div>
     </nav>
   );

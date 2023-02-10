@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Product from "./pages/Product";
 import Products from "./pages/Products";
 import Signup from "./pages/Signup";
+import Wishlist from "./pages/Wishlist";
 import Private from "./routers/Private";
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
             path="/mywishlist"
             element={
               <Private>
-                <Login />
+                <Wishlist />
               </Private>
             }
           />

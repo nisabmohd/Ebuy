@@ -55,7 +55,7 @@ export const signin = asyncHandler(
   ) => {
     const { emailOrPhone, password } = req.body;
     const user = await User.findOne({
-      $or: [{ email: emailOrPhone }, { phone: emailOrPhone }],
+      $or: [{ email: emailOrPhone }, { mobile: emailOrPhone }],
     });
     if (!user) throw new ServerError("User doesn't exist", 400);
     const compare = compareSync(password, user.password);

@@ -63,3 +63,4 @@ $ npm run dev
 
   <img src="./images/products.png" />
   <img src="./images/product.png" />
+  <img src="./images/wishlist.png" />

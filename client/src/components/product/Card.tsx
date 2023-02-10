@@ -2,7 +2,7 @@ import { Rating } from "@mui/material";
 import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-type cardprops = {
+export type cardProps = {
   productId: string;
   image: string;
   name: string;
@@ -20,7 +20,7 @@ export default function Card({
   discountedPrice,
   orignalprice,
   productId,
-}: cardprops) {
+}: cardProps) {
   return (
     <Link
       to={`/product/${productId}`}

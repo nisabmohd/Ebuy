@@ -43,14 +43,7 @@ const userSchema = new Schema(
         ],
       },
     ],
-    wishlists: [
-      {
-        productId: {
-          type: Schema.Types.ObjectId,
-          ref: "products",
-        },
-      },
-    ],
+    wishlists: { type: Array, default: [] },
     orders: [
       {
         orderId: {

@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 import authRouter from "./routes/auth";
 import productRouter from "./routes/product";
+import userRouter from "./routes/user";
 import { errorHandler } from "./middlewares/errorHandler";
 const app = express();
 import cors from "cors";
@@ -27,6 +28,7 @@ app.get("/test", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
+app.use("/user", userRouter);
 
 app.use(errorHandler);
 

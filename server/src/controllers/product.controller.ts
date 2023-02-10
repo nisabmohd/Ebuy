@@ -189,16 +189,30 @@ export const deleteReview = asyncHandler(async (req, res, next) => {
   res.json({ message: "deleted" });
 });
 
-export const addProductToWishList = asyncHandler(async (req, res, next) => {
-  const { productId } = req.query;
-  const updated = await User.updateOne(
-    { _id: req.userId },
-    { wishlists: { $push: productId } }
-  );
-  res.json({
-    succss: updated.modifiedCount == 1,
-  });
-});
+export const addOrRemoveProductFromWishList = asyncHandler(
+  async (req, res, next) => {
+    const { productId } = req.params;
+    if (!productId) throw new ServerError("Enter productId", 400);
+    const wishlist = await User.findOne({ _id: req.userId });
+    if (!wishlist?.wishlists.includes(productId!)) {
+      const updated = await User.updateOne(
+        { _id: req.userId },
+        { $push: { wishlists: productId } }
+      );
+      res.json({
+        success: updated.modifiedCount == 1,
+      });
+    } else {
+      const updated = await User.updateOne(
+        { _id: req.userId },
+        { $pull: { wishlists: productId } }
+      );
+      res.json({
+        success: updated.modifiedCount == 1,
+      });
+    }
+  }
+);
 
 // Admin
 //--------

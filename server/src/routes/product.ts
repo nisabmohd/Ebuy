@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addOrRemoveProductFromWishList,
   createProduct,
   deleteProduct,
   deleteReview,
@@ -24,6 +25,10 @@ router
   .delete(isAuthenticated, isAdmin, deleteProduct);
 
 router.route("/reviews/:id").get(getReviewsOfProduct);
+
+router
+  .route("/wishlist/:productId")
+  .get(isAuthenticated, addOrRemoveProductFromWishList);
 
 router
   .route("/review/:id")
