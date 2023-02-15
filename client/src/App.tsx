@@ -20,7 +20,7 @@ export function useAppContext() {
 }
 
 function App() {
-  const [hideNav] = useState(() => {
+  const [hideNav, setHideNav] = useState(() => {
     const page = document.location.pathname;
     return page === "/signup" || page === "/login";
   });
@@ -61,7 +61,7 @@ function App() {
                 </Private>
               }
             />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setHideNav={setHideNav} />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>

@@ -23,6 +23,7 @@ export type userType = {
   mobile: string | undefined;
   avatar: string | undefined;
   role: "USER" | "ADMIN";
+  _id: string;
 };
 
 export default function AuthContext({ children }: AuthContextProp) {

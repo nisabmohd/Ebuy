@@ -7,7 +7,11 @@ import { useAuth, userType } from "../contexts/AuthContext";
 import { http } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
-export default function Login() {
+export default function Login({
+  setHideNav,
+}: {
+  setHideNav: (val: boolean) => void;
+}) {
   const navigate = useNavigate();
   const { handleToast } = useAppContext();
   const { handleLoginUser } = useAuth();
@@ -28,6 +32,7 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("cart", JSON.stringify([]));
       handleLoginUser(res.data.user as userType);
+      setHideNav(false);
       navigate("/");
     },
   });
