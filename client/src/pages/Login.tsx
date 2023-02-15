@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../App";
+import Footer from "../components/Footer";
 import Logo from "../components/navbar/Logo";
 import { useAuth, userType } from "../contexts/AuthContext";
 import { httpRequest } from "../interceptor/axiosInterceptor";
@@ -102,6 +103,7 @@ export default function Login({
             Email or phone number
           </p>
           <input
+            placeholder="Mobile or email"
             type="text"
             value={credentials.emailOrPhone}
             onChange={(e) =>
@@ -137,6 +139,7 @@ export default function Login({
             Password
           </p>
           <input
+            placeholder="Your account password"
             type="password"
             value={credentials.password}
             onChange={(e) =>
@@ -219,6 +222,7 @@ export default function Login({
       >
         Create new account
       </button>
+      <Footer />
     </div>
   );
 }

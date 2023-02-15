@@ -60,7 +60,10 @@ function App() {
                 path="/login"
                 element={<Login setHideNav={setHideNav} />}
               />
-              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/signup"
+                element={<Signup setHideNav={setHideNav} />}
+              />
             </Routes>
           </div>
         </div>
