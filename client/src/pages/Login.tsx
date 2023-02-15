@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../App";
 import Footer from "../components/Footer";
 import Logo from "../components/navbar/Logo";
@@ -175,15 +175,18 @@ export default function Login({
         >
           Sign in
         </button>
-        <p
+        <Link
+          to={"/reset"}
           style={{
             width: "90%",
             margin: "auto",
             fontSize: "13px",
+            textDecoration: "none",
+            color: "inherit",
           }}
         >
           Forgot password?
-        </p>
+        </Link>
       </div>
       <div
         className="linebar"

@@ -10,6 +10,11 @@ import Private from "./routers/Private";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuth, userType } from "./contexts/AuthContext";
 import ShoppingContext from "./contexts/ShoppingContext";
+import Cart from "./pages/Cart";
+import Profile from "./pages/Profile";
+import Orders from "./pages/Orders";
+import Notifications from "./pages/Notifications";
+import Forgot from "./pages/Forgot";
 
 export type contextValueType = {
   handleToast: (message: string, toastType: "error" | "success") => void;
@@ -22,7 +27,6 @@ export function useAppContext() {
 
 function App() {
   const [hideNav, setHideNav] = useState(false);
-  const { handleLoginUser } = useAuth();
   const contextValue: contextValueType = {
     handleToast,
   };
@@ -55,6 +59,42 @@ function App() {
                     <Wishlist />
                   </Private>
                 }
+              />
+              <Route
+                path="/mycart"
+                element={
+                  <Private>
+                    <Cart />
+                  </Private>
+                }
+              />
+              <Route
+                path="/myprofile"
+                element={
+                  <Private>
+                    <Profile />
+                  </Private>
+                }
+              />
+              <Route
+                path="/myorders"
+                element={
+                  <Private>
+                    <Orders />
+                  </Private>
+                }
+              />
+              <Route
+                path="/mynotifications"
+                element={
+                  <Private>
+                    <Notifications />
+                  </Private>
+                }
+              />
+              <Route
+                path="/reset"
+                element={<Forgot setHideNav={setHideNav} />}
               />
               <Route
                 path="/login"

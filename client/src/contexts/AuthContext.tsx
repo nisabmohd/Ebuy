@@ -39,6 +39,7 @@ export default function AuthContext({ children }: AuthContextProp) {
   }
   function handleLogoutUser() {
     setAuth({ user: undefined });
+    localStorage.clear();
   }
   function getCurrentUser() {
     return Auth.user;

@@ -1,11 +1,15 @@
 import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import RequestLogin from "../pages/RequestLogin";
 
 type PrivateRouteProps = {
   children: ReactNode;
 };
 export default function Private({ children }: PrivateRouteProps) {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <RequestLogin page={document.location.pathname} />
+  );
 }
