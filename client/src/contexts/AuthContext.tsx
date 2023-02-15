@@ -1,33 +1,53 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
-const Context = createContext<any>(undefined);
+export type AuthContextType = {
+  isAuthenticated: () => boolean;
+  handleLoginUser: (user: userType) => void;
+  handleLogoutUser: () => void;
+  getCurrentUser: () => userType | undefined;
+};
+const Context = createContext<AuthContextType | undefined>(undefined);
 
 export function useAuth() {
-  return useContext(Context);
+  return useContext(Context) as AuthContextType;
 }
 
 type AuthContextProp = {
   children: ReactNode;
 };
 
+export type userType = {
+  email: string | undefined;
+  firstname: string;
+  lastname: string | undefined;
+  mobile: string | undefined;
+  avatar: string | undefined;
+  role: "USER" | "ADMIN";
+};
+
 export default function AuthContext({ children }: AuthContextProp) {
-  const [Auth, setAuth] = useState<any>();
+  const [Auth, setAuth] = useState<{ user: userType | undefined }>({
+    user: undefined,
+  });
+  console.log(Auth);
+
   function isAuthenticated() {
     return Auth != undefined;
   }
-  function handleLogin(user: {}) {
-    setAuth(user);
+  function handleLoginUser(user: userType) {
+    console.log(user);
+    setAuth({ user });
   }
-  function handleLogout() {
-    setAuth(undefined);
+  function handleLogoutUser() {
+    setAuth({ user: undefined });
   }
   function getCurrentUser() {
     return Auth.user;
   }
   const contextValue = {
     isAuthenticated,
-    handleLogin,
-    handleLogout,
+    handleLoginUser,
+    handleLogoutUser,
     getCurrentUser,
   };
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;

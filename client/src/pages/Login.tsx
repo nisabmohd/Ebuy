@@ -1,6 +1,42 @@
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../App";
 import Logo from "../components/navbar/Logo";
+import { useAuth, userType } from "../contexts/AuthContext";
+import { http } from "../interceptor/axiosInterceptor";
+import { url } from "../url";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { handleToast } = useAppContext();
+  const { handleLoginUser } = useAuth();
+  const [credentials, setCredentials] = useState({
+    emailOrPhone: "",
+    password: "",
+  });
+  const [makeLoginRequest, setMakeLoginRequest] = useState(false);
+
+  useQuery({
+    queryFn: () => http.post(`${url}/auth/signin`, credentials),
+    queryKey: ["login"],
+    enabled: makeLoginRequest,
+    onSuccess: (res) => {
+      console.log(res.data);
+      localStorage.setItem("refresh_token", res.data.refresh_token);
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("cart", JSON.stringify([]));
+      handleLoginUser(res.data.user as userType);
+      navigate("/");
+    },
+  });
+
+  async function handleLogin() {
+    if (!credentials.emailOrPhone || !credentials.password)
+      handleToast("All credentials required", "error");
+    setMakeLoginRequest(true);
+  }
   return (
     <div
       style={{
@@ -56,7 +92,13 @@ export default function Login() {
             Email or phone number
           </p>
           <input
-            type="email"
+            type="text"
+            value={credentials.emailOrPhone}
+            onChange={(e) =>
+              setCredentials((prev) => {
+                return { ...prev, emailOrPhone: e.target.value };
+              })
+            }
             style={{
               height: "29px",
               borderRadius: "4px",
@@ -86,6 +128,12 @@ export default function Login() {
           </p>
           <input
             type="password"
+            value={credentials.password}
+            onChange={(e) =>
+              setCredentials((prev) => {
+                return { ...prev, password: e.target.value };
+              })
+            }
             style={{
               height: "29px",
               borderRadius: "4px",
@@ -96,6 +144,7 @@ export default function Login() {
           />
         </div>
         <button
+          onClick={handleLogin}
           style={{
             width: "90%",
             margin: "auto",
