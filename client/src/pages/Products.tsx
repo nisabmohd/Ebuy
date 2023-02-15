@@ -7,9 +7,10 @@ import Error from "../components/Error";
 import Loader from "../components/Loader";
 import Card from "../components/product/Card";
 import Category from "../components/product/Category";
+import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
-type ProductType = {
+export type ProductType = {
   _id: string;
   name: string;
   brand: string;
@@ -34,7 +35,7 @@ export default function Products() {
 
   const { isError = false, isLoading = true } = useQuery({
     queryFn: () =>
-      axios.post(`${url}/product/query`, {
+      httpRequest.post(`${url}/product/query`, {
         category: query.get("category"),
         low: query.get("low"),
         high: query.get("high"),

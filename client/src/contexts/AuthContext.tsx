@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, useMemo } from "react";
 
 export type AuthContextType = {
-  isAuthenticated: () => boolean;
+  isAuthenticated: boolean;
   handleLoginUser: (user: userType) => void;
   handleLogoutUser: () => void;
   getCurrentUser: () => userType | undefined;
@@ -28,15 +28,13 @@ export type userType = {
 
 export default function AuthContext({ children }: AuthContextProp) {
   const [Auth, setAuth] = useState<{ user: userType | undefined }>({
-    user: undefined,
+    user: localStorage.getItem("user")
+      ? (JSON.parse(localStorage.getItem("user")!) as userType)
+      : undefined,
   });
-  console.log(Auth);
 
-  function isAuthenticated() {
-    return Auth != undefined;
-  }
+  const isAuthenticated = useMemo(() => Auth.user != undefined, [Auth]);
   function handleLoginUser(user: userType) {
-    console.log(user);
     setAuth({ user });
   }
   function handleLogoutUser() {

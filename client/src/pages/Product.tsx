@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
 import Review from "../components/product/Review";
-import { http } from "../interceptor/axiosInterceptor";
+import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
 export default function Product() {
@@ -14,7 +14,7 @@ export default function Product() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [colorIndex, setColorIndex] = useState<number>(0);
   const { data, isLoading, error } = useQuery({
-    queryFn: () => http.get(`${url}/product/${id}`),
+    queryFn: () => httpRequest.get(`${url}/product/${id}`),
     queryKey: ["product", id],
     onSuccess: (res) => {
       setProductFetched(true);
@@ -26,7 +26,7 @@ export default function Product() {
     isLoading: LoadingReviews,
     error: errReviews,
   } = useQuery({
-    queryFn: () => http.get(`${url}/product/reviews/${id}`),
+    queryFn: () => httpRequest.get(`${url}/product/reviews/${id}`),
     queryKey: ["reviews", id],
     enabled: !productFetched,
   });

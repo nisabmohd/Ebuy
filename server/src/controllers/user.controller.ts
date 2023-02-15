@@ -15,7 +15,9 @@ export const getWishList = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ _id: userId });
   if (!user) throw new ServerError("No user found", 404);
   const list = await Promise.all(
-    user.wishlists.map(async (item) => await Product.findOne({ _id: item }))
+    user.wishlists
+      .reverse()
+      .map(async (item) => await Product.findOne({ _id: item }))
   );
   res.json(list);
 });

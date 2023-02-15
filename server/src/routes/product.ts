@@ -28,7 +28,7 @@ router.route("/reviews/:id").get(getReviewsOfProduct);
 
 router
   .route("/wishlist/:productId")
-  .get(isAuthenticated, addOrRemoveProductFromWishList);
+  .put(isAuthenticated, addOrRemoveProductFromWishList);
 
 router
   .route("/review/:id")

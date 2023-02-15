@@ -1,6 +1,11 @@
 import { Rating } from "@mui/material";
 import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { httpRequest } from "../../interceptor/axiosInterceptor";
+import { url } from "../../url";
+import { useState } from "react";
+import { useShopping } from "../../contexts/ShoppingContext";
 
 export type cardProps = {
   productId: string;
@@ -21,6 +26,18 @@ export default function Card({
   orignalprice,
   productId,
 }: cardProps) {
+  const { includesInWishList } = useShopping();
+  const [inWishlist, setInWishList] = useState(includesInWishList(productId));
+  const queryClient = useQueryClient();
+  const { refetch } = useQuery({
+    queryFn: () => httpRequest.put(`${url}/product/wishlist/${productId}`),
+    queryKey: ["handlewishlist", productId],
+    enabled: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      setInWishList((prev) => !prev);
+    },
+  });
   return (
     <Link
       to={`/product/${productId}`}
@@ -59,9 +76,10 @@ export default function Card({
             style={{ position: "absolute", top: "12px", right: "12px" }}
             onClick={(e) => {
               e.preventDefault();
+              refetch();
             }}
           >
-            <FavoriteIcon sx={{ color: "#beb7b7" }} />
+            <FavoriteIcon sx={{ color: inWishlist ? "red" : "#beb7b7" }} />
           </div>
         }
       </div>

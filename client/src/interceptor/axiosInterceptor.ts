@@ -24,7 +24,10 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401) {
+    if (
+      error.response.status === 401 &&
+      error.response.message === "UnAuthorized, JWT Expired"
+    ) {
       const refreshToken = localStorage.getItem("refresh_token");
 
       if (refreshToken) {
@@ -49,4 +52,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export const http = axiosInstance;
+export const httpRequest = axiosInstance;

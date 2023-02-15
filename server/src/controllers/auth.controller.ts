@@ -92,6 +92,6 @@ export const handleToken = asyncHandler(
     const access_token = jwt.sign({ id: decoded.id }, env.JWT_SECRET, {
       expiresIn: "30m",
     });
-    res.json(access_token);
+    res.json({ access_token });
   }
 );

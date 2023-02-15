@@ -3,6 +3,9 @@ import { cardProps } from "./Card";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { httpRequest } from "../../interceptor/axiosInterceptor";
+import { url } from "../../url";
 
 export default function HoizontalCard({
   image,
@@ -13,6 +16,15 @@ export default function HoizontalCard({
   orignalprice,
   productId,
 }: cardProps) {
+  const queryClient = useQueryClient();
+  const { refetch } = useQuery({
+    queryFn: () => httpRequest.put(`${url}/product/wishlist/${productId}`),
+    queryKey: ["handlewishlist", productId],
+    enabled: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+    },
+  });
   return (
     <div style={{ position: "relative" }}>
       <Link
@@ -49,14 +61,18 @@ export default function HoizontalCard({
               marginTop: "5px",
             }}
           >
-            <Rating
-              size="small"
-              name="read-only"
-              value={ratings}
-              precision={0.1}
-              readOnly
-            />
-            <p style={{ fontSize: "12.5px" }}>({reviewCount})</p>
+            {ratings != 0 && (
+              <>
+                <Rating
+                  size="small"
+                  name="read-only"
+                  value={ratings}
+                  precision={0.1}
+                  readOnly
+                />
+                <p style={{ fontSize: "12.5px" }}>({reviewCount})</p>
+              </>
+            )}
           </div>
           <div
             className="price"
@@ -86,6 +102,7 @@ export default function HoizontalCard({
         </div>
       </Link>
       <IconButton
+        onClick={() => refetch()}
         style={{ position: "absolute", top: "3.55px", right: "12px" }}
       >
         {<DeleteOutlineIcon sx={{ fontSize: "20px", color: "black" }} />}

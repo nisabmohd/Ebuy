@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../App";
 import Logo from "../components/navbar/Logo";
 import { useAuth, userType } from "../contexts/AuthContext";
-import { http } from "../interceptor/axiosInterceptor";
+import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
 export default function Login({
@@ -21,8 +21,12 @@ export default function Login({
   });
   const [makeLoginRequest, setMakeLoginRequest] = useState(false);
 
+  useEffect(() => {
+    setHideNav(true);
+  }, []);
+
   useQuery({
-    queryFn: () => http.post(`${url}/auth/signin`, credentials),
+    queryFn: () => httpRequest.post(`${url}/auth/signin`, credentials),
     queryKey: ["login"],
     enabled: makeLoginRequest,
     onSuccess: (res) => {
@@ -38,8 +42,9 @@ export default function Login({
   });
 
   async function handleLogin() {
-    if (!credentials.emailOrPhone || !credentials.password)
+    if (!credentials.emailOrPhone || !credentials.password) {
       handleToast("All credentials required", "error");
+    }
     setMakeLoginRequest(true);
   }
   return (
@@ -199,6 +204,7 @@ export default function Login({
         ></div>
       </div>
       <button
+        onClick={() => navigate("/signup")}
         style={{
           backgroundColor: "#d1d1d1",
           padding: "7px 0",
