@@ -32,7 +32,13 @@ function App() {
   };
 
   function handleToast(message: string, toastType: "error" | "success") {
-    toast[toastType](message);
+    toast[toastType](message, {
+      style: {
+        borderRadius: "5px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   }
 
   return (
