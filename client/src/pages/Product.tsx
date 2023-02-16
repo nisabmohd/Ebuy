@@ -195,7 +195,7 @@ export default function Product() {
               marginTop: "28px",
             }}
           >
-            <h5>Colour : {data?.data.colors[0]?.color}</h5>
+            <h5>Colour : {data?.data.colors[colorIndex]?.color}</h5>
             <div
               style={{
                 display: "flex",

@@ -73,6 +73,7 @@ export default function SubNav() {
         flexDirection: "row",
         textAlign: "center",
         alignItems: "center",
+        overflowX: "auto",
       }}
     >
       <div

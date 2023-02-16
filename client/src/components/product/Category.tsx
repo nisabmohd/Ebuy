@@ -53,7 +53,10 @@ export default function Category({
   price,
 }: CategoryProp) {
   return (
-    <div style={{ width: "300px", marginRight: "1.8vw", paddingTop: "24px" }}>
+    <div
+      style={{ width: "300px", marginRight: "1.8vw", paddingTop: "24px" }}
+      className="filter"
+    >
       <div className="sortby">
         <h4 style={{ marginLeft: "8px", textTransform: "uppercase" }}>
           Sort By

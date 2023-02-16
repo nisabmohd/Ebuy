@@ -10,6 +10,7 @@ export default function Wishlist() {
   const { wishListItems } = useShopping();
   return (
     <div
+      className="sep_pages"
       style={{
         display: "flex",
         flexDirection: "column",

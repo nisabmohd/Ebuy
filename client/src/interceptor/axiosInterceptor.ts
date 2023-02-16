@@ -26,7 +26,7 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response.status === 401 &&
-      error.response.message === "UnAuthorized, JWT Expired"
+      error.response.data.message === "UnAuthorized, JWT Expired"
     ) {
       const refreshToken = localStorage.getItem("refresh_token");
 

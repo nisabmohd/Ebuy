@@ -102,7 +102,7 @@ export default function Navbar() {
           className={style.tab}
         >
           <img style={tabImgStyle} src={heartIcon} alt="" />
-          <p>Wishlist</p>
+          <p className="nav_tab_text">Wishlist</p>
         </Link>
         {isAuthenticated && (
           <>
@@ -116,7 +116,7 @@ export default function Navbar() {
               className={style.tab}
             >
               <img style={tabImgStyle} src={profileIcon} alt="" />
-              <p>Profile</p>
+              <p className="nav_tab_text">Profile</p>
             </div>
             <Menu
               id="demo-positioned-menu"
@@ -157,7 +157,7 @@ export default function Navbar() {
           className={style.tab}
         >
           <img style={tabImgStyle} src={cartIcon} alt="" />
-          <p>Cart</p>
+          <p className="nav_tab_text">Cart</p>
         </Link>
       </div>
     </nav>

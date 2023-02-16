@@ -32,7 +32,7 @@ export const getProducts = asyncHandler(async (req, res, next) => {
     low,
     high,
     search,
-    limit = 1,
+    limit = 8,
   } = req.body;
   page = page ? page - 1 : 0;
   const getQuery = () => {
@@ -69,11 +69,11 @@ export const getProducts = asyncHandler(async (req, res, next) => {
     }
     if (sortby === "lowtohigh")
       query = query.sort({
-        originalPrice: 1,
+        discountedPrice: 1,
       });
     if (sortby === "hightolow")
       query = query.sort({
-        originalPrice: -1,
+        discountedPrice: -1,
       });
     if (sortby === "newestfirst") {
       query = query.sort({ updatedAt: -1 });
@@ -85,9 +85,9 @@ export const getProducts = asyncHandler(async (req, res, next) => {
   };
   const result: any = {};
   const total = await getQuery().countDocuments();
-  result.total = total;
   const startIndex = page * limit;
   const endIndex = (page + 1) * limit;
+  result.total = Math.ceil(total / limit);
   if (startIndex > 0) {
     result.previous = {
       pageNumber: page - 1,

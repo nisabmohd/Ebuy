@@ -26,7 +26,10 @@ export default function Logo({ black = false, large = false }: LogoProps) {
         src={black ? logoblack : logo}
         alt=""
       />
-      <p style={{ fontSize: large ? "22px" : "22px", fontWeight: "bold" }}>
+      <p
+        className="nav_tab_text"
+        style={{ fontSize: large ? "22px" : "22px", fontWeight: "bold" }}
+      >
         Ebuy &nbsp;
       </p>
     </Link>
