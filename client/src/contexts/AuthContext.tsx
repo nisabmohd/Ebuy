@@ -1,10 +1,21 @@
 import { createContext, ReactNode, useContext, useState, useMemo } from "react";
+import useLocalStorage, { clearLocalStorage } from "../hooks/useLocalStorage";
+
+export type UserType = {
+  email: string | undefined;
+  firstname: string;
+  lastname: string | undefined;
+  mobile: string | undefined;
+  avatar: string | undefined;
+  role: "USER" | "ADMIN";
+  _id: string;
+};
 
 export type AuthContextType = {
   isAuthenticated: boolean;
-  handleLoginUser: (user: userType) => void;
+  handleLoginUser: (user: UserType) => void;
   handleLogoutUser: () => void;
-  getCurrentUser: () => userType | undefined;
+  getCurrentUser: () => UserType | undefined;
 };
 const Context = createContext<AuthContextType | undefined>(undefined);
 
@@ -16,30 +27,22 @@ type AuthContextProp = {
   children: ReactNode;
 };
 
-export type userType = {
-  email: string | undefined;
-  firstname: string;
-  lastname: string | undefined;
-  mobile: string | undefined;
-  avatar: string | undefined;
-  role: "USER" | "ADMIN";
-  _id: string;
-};
-
 export default function AuthContext({ children }: AuthContextProp) {
-  const [Auth, setAuth] = useState<{ user: userType | undefined }>({
-    user: localStorage.getItem("user")
-      ? (JSON.parse(localStorage.getItem("user")!) as userType)
-      : undefined,
+  const [localUser] = useLocalStorage<UserType | undefined>("user", undefined);
+  const [Auth, setAuth] = useState<{ user: UserType | undefined }>({
+    user: localUser,
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => Auth.user != undefined
+  );
 
-  const isAuthenticated = useMemo(() => Auth.user != undefined, [Auth]);
-  function handleLoginUser(user: userType) {
+  function handleLoginUser(user: UserType) {
     setAuth({ user });
+    setIsAuthenticated(false);
   }
   function handleLogoutUser() {
     setAuth({ user: undefined });
-    localStorage.clear();
+    clearLocalStorage();
   }
   function getCurrentUser() {
     return Auth.user;

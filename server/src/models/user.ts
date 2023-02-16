@@ -37,8 +37,10 @@ const userSchema = new Schema(
         },
         phone: [
           {
-            number: String,
-            prefix: String,
+            number: {
+              type: String,
+              required: true,
+            },
           },
         ],
       },

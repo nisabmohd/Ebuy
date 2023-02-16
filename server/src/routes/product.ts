@@ -4,6 +4,7 @@ import {
   createProduct,
   deleteProduct,
   deleteReview,
+  generateHomePage,
   getProduct,
   getProducts,
   getReviewsOfProduct,
@@ -17,6 +18,8 @@ const router = express.Router();
 router.route("/new").post(isAuthenticated, isAdmin, createProduct);
 
 router.route("/query").post(getProducts);
+
+router.route("/homepage").get(generateHomePage);
 
 router
   .route("/:id")

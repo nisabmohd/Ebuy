@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../App";
 import Footer from "../components/Footer";
 import Logo from "../components/navbar/Logo";
-import { useAuth, userType } from "../contexts/AuthContext";
+import { useAuth, UserType } from "../contexts/AuthContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
@@ -14,6 +15,19 @@ export default function Login({
   setHideNav: (val: boolean) => void;
 }) {
   const navigate = useNavigate();
+  const [_, setLocalUser] = useLocalStorage<UserType | undefined>(
+    "user",
+    undefined
+  );
+  const [__, setLocalCart] = useLocalStorage<any>("cart", undefined);
+  const [___, setlocalRefreshToken] = useLocalStorage<string | undefined>(
+    "refresh_token",
+    undefined
+  );
+  const [____, setlocalAccessToken] = useLocalStorage<string | undefined>(
+    "access_token",
+    undefined
+  );
   const { handleToast } = useAppContext();
   const { handleLoginUser } = useAuth();
   const [credentials, setCredentials] = useState({
@@ -32,11 +46,11 @@ export default function Login({
     enabled: makeLoginRequest,
     onSuccess: (res) => {
       console.log(res.data);
-      localStorage.setItem("refresh_token", res.data.refresh_token);
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("cart", JSON.stringify([]));
-      handleLoginUser(res.data.user as userType);
+      setLocalUser(res.data.user as UserType);
+      setLocalCart([]);
+      setlocalRefreshToken(res.data.refresh_token);
+      setlocalAccessToken(res.data.access_token);
+      handleLoginUser(res.data.user as UserType);
       setHideNav(false);
       navigate("/");
     },

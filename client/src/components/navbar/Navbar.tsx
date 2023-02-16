@@ -13,6 +13,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAppContext } from "../../App";
 import { httpRequest } from "../../interceptor/axiosInterceptor";
 import { url } from "../../url";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const profileMenu = [
   {
@@ -38,6 +39,10 @@ const profileMenu = [
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [refreshLocal] = useLocalStorage<string | undefined>(
+    "refresh_token",
+    undefined
+  );
   const { handleLogoutUser, isAuthenticated } = useAuth();
   const { handleToast } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -53,7 +58,7 @@ export default function Navbar() {
   const { refetch } = useQuery({
     queryFn: () =>
       httpRequest.post(`${url}/auth/signout`, {
-        refresh_token: localStorage.getItem("refresh_token"),
+        refresh_token: refreshLocal,
       }),
     enabled: false,
     queryKey: ["logout"],

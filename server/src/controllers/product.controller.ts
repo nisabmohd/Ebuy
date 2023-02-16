@@ -104,6 +104,8 @@ export const getProducts = asyncHandler(async (req, res, next) => {
   res.json(result);
 });
 
+export const generateHomePage = asyncHandler(async (req, res, next) => {});
+
 // User
 //------
 export const reviewProduct = asyncHandler(async (req, res, next) => {

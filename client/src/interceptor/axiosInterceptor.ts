@@ -10,7 +10,9 @@ interface CustomAxios extends InternalAxiosRequestConfig<any> {
 axiosInstance.interceptors.request.use(
   async (config: CustomAxios) => {
     config.headers = {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      Authorization: `Bearer ${JSON.parse(
+        localStorage.getItem("access_token")!
+      )}`,
     };
     return config;
   },
@@ -33,9 +35,12 @@ axiosInstance.interceptors.response.use(
       if (refreshToken) {
         try {
           const response = await axiosInstance.post(`${url}/auth/token`, {
-            token: refreshToken,
+            token: JSON.parse(refreshToken),
           });
-          localStorage.setItem("access_token", response.data.access_token);
+          localStorage.setItem(
+            "access_token",
+            JSON.stringify(response.data.access_token)
+          );
 
           axiosInstance.defaults.headers["Authorization"] =
             "Bearer " + response.data.access_token;
