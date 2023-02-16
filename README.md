@@ -1,4 +1,4 @@
-# Ebut an ecommerce website made using MERN stack (on built)
+# Ebuy an ecommerce website made using MERN stack (on built)
 
 This project is made with React, Node and Typescript.
 
