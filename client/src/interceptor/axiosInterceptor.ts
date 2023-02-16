@@ -3,12 +3,12 @@ import { url } from "../url";
 
 const axiosInstance = axios.create({});
 
-interface CustomAxios extends InternalAxiosRequestConfig<any> {
+interface CustomAxiosConfig extends InternalAxiosRequestConfig<any> {
   headers: any;
 }
 
 axiosInstance.interceptors.request.use(
-  async (config: CustomAxios) => {
+  async (config: CustomAxiosConfig) => {
     config.headers = {
       Authorization: `Bearer ${JSON.parse(
         localStorage.getItem("access_token")!
