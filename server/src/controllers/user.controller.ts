@@ -44,8 +44,6 @@ export const getWishList = asyncHandler(async (req, res, next) => {
 
 export const editUserDetails = asyncHandler(async (req, res, next) => {
   const { userId } = req;
-  const { id } = req.params;
-  if (userId != id) throw new ServerError("No permission", 403);
   const updated = await User.findOneAndUpdate(
     { _id: userId },
     { $set: req.body },

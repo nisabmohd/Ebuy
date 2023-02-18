@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext, useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/navbar/Navigation";
 import Login from "./pages/Login";
@@ -8,13 +8,14 @@ import Signup from "./pages/Signup";
 import Wishlist from "./pages/Wishlist";
 import Private from "./routers/Private";
 import toast, { Toaster } from "react-hot-toast";
-import { useAuth, userType } from "./contexts/AuthContext";
 import ShoppingContext from "./contexts/ShoppingContext";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 import Notifications from "./pages/Notifications";
 import Forgot from "./pages/Forgot";
+import ProfileLeftBar from "./components/profile/ProfileLeftBar";
+import ProfileContainer from "./components/profile/ProfileContainer";
 
 export type contextValueType = {
   handleToast: (message: string, toastType: "error" | "success") => void;
@@ -27,9 +28,6 @@ export function useAppContext() {
 
 function App() {
   const [hideNav, setHideNav] = useState(false);
-  const contextValue: contextValueType = {
-    handleToast,
-  };
 
   function handleToast(message: string, toastType: "error" | "success") {
     toast[toastType](message, {
@@ -40,7 +38,11 @@ function App() {
       },
     });
   }
-
+  const contextValue: contextValueType = useMemo(() => {
+    return {
+      handleToast,
+    };
+  }, []);
   return (
     <AppContext.Provider value={contextValue}>
       <ShoppingContext>
@@ -67,26 +69,13 @@ function App() {
                 }
               />
               <Route
-                path="/mycart"
-                element={
-                  <Private>
-                    <Cart />
-                  </Private>
-                }
-              />
-              <Route
-                path="/myprofile"
-                element={
-                  <Private>
-                    <Profile />
-                  </Private>
-                }
-              />
-              <Route
                 path="/myorders"
                 element={
                   <Private>
-                    <Orders />
+                    <ProfileContainer>
+                      <ProfileLeftBar />
+                      <Orders />
+                    </ProfileContainer>
                   </Private>
                 }
               />
@@ -94,7 +83,29 @@ function App() {
                 path="/mynotifications"
                 element={
                   <Private>
-                    <Notifications />
+                    <ProfileContainer>
+                      <ProfileLeftBar />
+                      <Notifications />
+                    </ProfileContainer>
+                  </Private>
+                }
+              />
+              <Route
+                path="/myprofile"
+                element={
+                  <Private>
+                    <ProfileContainer>
+                      <ProfileLeftBar />
+                      <Profile />
+                    </ProfileContainer>
+                  </Private>
+                }
+              />
+              <Route
+                path="/mycart"
+                element={
+                  <Private>
+                    <Cart />
                   </Private>
                 }
               />
