@@ -10,7 +10,7 @@ export default function Address({
   phone,
   state,
   city,
-  id,
+  _id,
   handlechange,
 }: AddressTypeProps) {
   const [AddessValue, setAddressValue] = useState({
@@ -18,7 +18,7 @@ export default function Address({
     phone,
     state,
     city,
-    id,
+    _id,
   });
   function handlechangeInputs(e: React.ChangeEvent<HTMLInputElement>) {
     setAddressValue((prev) => {
