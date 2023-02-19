@@ -73,7 +73,7 @@ export default function ShoppingContext({ children }: { children: ReactNode }) {
   });
   function addToCart(item: CartItemsType) {
     if (!isAuthenticated)
-      handleToast("Please login to add product in your cart", "error");
+      return handleToast("Please login to add product in your cart", "error");
     const thatItem = cartItems.find(
       (cartItem) => cartItem._id === item._id && cartItem.image === item.image
     );
