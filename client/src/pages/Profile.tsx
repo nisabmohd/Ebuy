@@ -114,12 +114,11 @@ export default function Profile() {
     <div
       style={{
         width: "85%",
-        border: "1px solid #dadada",
+        borderLeft: "1px solid #dadada",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         padding: "5vh 0",
-        borderRadius: "11px",
         minHeight: "75vh",
       }}
     >

@@ -14,6 +14,7 @@ import { useAppContext } from "../../App";
 import { httpRequest } from "../../interceptor/axiosInterceptor";
 import { url } from "../../url";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { useShopping } from "../../contexts/ShoppingContext";
 
 const profileMenu = [
   {
@@ -158,7 +159,11 @@ export default function Navbar() {
         )}
         <Link
           to="/mycart"
-          style={{ color: "inherit", textDecoration: "none" }}
+          style={{
+            color: "inherit",
+            textDecoration: "none",
+            position: "relative",
+          }}
           className={style.tab}
         >
           <img style={tabImgStyle} src={cartIcon} alt="" />

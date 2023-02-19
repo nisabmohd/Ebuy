@@ -5,11 +5,13 @@ import { useParams } from "react-router-dom";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
 import Review from "../components/product/Review";
+import { useShopping } from "../contexts/ShoppingContext";
 import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../url";
 
 export default function Product() {
   const { id } = useParams();
+  const { addToCart } = useShopping();
   const [productFetched, setProductFetched] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [colorIndex, setColorIndex] = useState<number>(0);
@@ -20,6 +22,7 @@ export default function Product() {
       setProductFetched(true);
     },
   });
+  console.log(data);
 
   const {
     data: reviews,
@@ -32,6 +35,19 @@ export default function Product() {
   });
   function handleChangeColor(index: number) {
     setColorIndex(index);
+  }
+  function handleItemToCart() {
+    addToCart({
+      _id: data?.data._id,
+      brand: data?.data.brand,
+      discountedPrice: data?.data.discountedPrice,
+      orignalPrice: data?.data.originalPrice,
+      image: data?.data.colors[colorIndex].images[0],
+      name: data?.data.name,
+      quantity: 1,
+      ratings: data?.data.rating,
+      reviews: data?.data.reviews,
+    });
   }
   if (error) return <Error message="Something went wrong" />;
   if (isLoading) return <Loader />;
@@ -124,6 +140,7 @@ export default function Product() {
               Buy Now
             </button>
             <button
+              onClick={handleItemToCart}
               style={{
                 width: "285px",
                 height: "50px",
@@ -152,7 +169,7 @@ export default function Product() {
             </p>
           </div>
           <div style={{ marginTop: "9px" }}>
-            <Rating precision={0.1} value={3.4} readOnly></Rating>
+            <Rating precision={0.1} value={data?.data.rating} readOnly></Rating>
           </div>
           <div className="pricing" style={{ marginTop: "12px" }}>
             <div

@@ -1,26 +1,45 @@
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useContext, ReactNode, useState } from "react";
+import { createContext, useContext, ReactNode, useState, useMemo } from "react";
+import { useAppContext } from "../App";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { httpRequest } from "../interceptor/axiosInterceptor";
 import { ProductType } from "../pages/Products";
 import { url } from "../url";
 import { useAuth } from "./AuthContext";
 
+export type CartItemsType = ProductType & {
+  quantity: number;
+};
+
 type ContextValueType = {
-  addToCart: (item: ProductType) => void;
+  addToCart: (item: CartItemsType) => void;
   removeFromCart: (id: string) => void;
   includesInWishList: (id: string) => boolean;
   wishListItems: ProductType[];
-  cartItems: ProductType[];
+  cartItems: CartItemsType[];
+  decrementQuantity: (id: string) => void;
+  incrementQuantity: (id: string) => void;
 };
+
+const insert = (
+  arr: CartItemsType[],
+  index: number,
+  newItem: CartItemsType
+) => [...arr.slice(0, index), newItem, ...arr.slice(index)];
+
 const Context = createContext<ContextValueType | undefined>(undefined);
 export function useShopping() {
   return useContext(Context) as ContextValueType;
 }
 
 export default function ShoppingContext({ children }: { children: ReactNode }) {
-  const [cartItems, setcartItems] = useState<ProductType[]>([]);
+  const [cartItems, setcartItems] = useLocalStorage<CartItemsType[]>(
+    "cart",
+    []
+  );
   const [wishListItems, setwishListItems] = useState<ProductType[]>([]);
   const { isAuthenticated } = useAuth();
+  const { handleToast } = useAppContext();
   useQuery({
     queryFn: () => httpRequest.get(`${url}/user/wishlist`),
     queryKey: ["wishlist"],
@@ -52,11 +71,53 @@ export default function ShoppingContext({ children }: { children: ReactNode }) {
       setwishListItems(data);
     },
   });
-  function addToCart(item: ProductType) {
-    setcartItems((prev) => [...prev, item]);
+  function addToCart(item: CartItemsType) {
+    const thatItem = cartItems.find(
+      (cartItem) => cartItem._id === item._id && cartItem.image === item.image
+    );
+    const thatItemIndex = cartItems.findIndex(
+      (cartItem) => cartItem._id === item._id && cartItem.image === item.image
+    );
+    let filtered = cartItems.filter(
+      (cartItem) => cartItem._id !== item._id && cartItem.image !== item.image
+    );
+    console.log(thatItem, filtered, thatItemIndex);
+
+    if (!thatItem) {
+      filtered.push(item);
+    } else {
+      thatItem.quantity += 1;
+      filtered = insert(filtered, thatItemIndex, thatItem);
+    }
+    setcartItems(filtered);
+    handleToast("Added to cart", "success");
   }
   function removeFromCart(id: string) {
-    setcartItems((prev) => prev.filter((item) => item._id != id));
+    setcartItems(cartItems.filter((item) => item._id != id));
+    handleToast("Removed to cart", "success");
+  }
+  function decrementQuantity(id: string) {
+    const thatItem = cartItems.find((cartItem) => cartItem._id === id);
+    if (!thatItem) return;
+    if (thatItem.quantity == 1) return removeFromCart(id);
+    const filtered = cartItems.filter((cartItem) => cartItem._id !== id);
+    thatItem.quantity -= 1;
+    const thatItemIndex = cartItems.findIndex(
+      (cartItem) => cartItem._id === id
+    );
+    const result = insert(filtered, thatItemIndex, thatItem);
+    setcartItems(result);
+  }
+  function incrementQuantity(id: string) {
+    const thatItem = cartItems.find((cartItem) => cartItem._id === id);
+    if (!thatItem) return;
+    const filtered = cartItems.filter((cartItem) => cartItem._id !== id);
+    thatItem.quantity += 1;
+    const thatItemIndex = cartItems.findIndex(
+      (cartItem) => cartItem._id === id
+    );
+    const result = insert(filtered, thatItemIndex, thatItem);
+    setcartItems(result);
   }
   function includesInWishList(id: string) {
     const wishlistItem = wishListItems.find((item) => item._id == id);
@@ -65,6 +126,8 @@ export default function ShoppingContext({ children }: { children: ReactNode }) {
   const contextValue = {
     addToCart,
     removeFromCart,
+    decrementQuantity,
+    incrementQuantity,
     includesInWishList,
     wishListItems,
     cartItems,
