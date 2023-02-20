@@ -40,12 +40,7 @@ const profileMenu = [
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [refreshLocal] = useLocalStorage<string | undefined>(
-    "refresh_token",
-    undefined
-  );
   const { handleLogoutUser, isAuthenticated } = useAuth();
-  const { handleToast } = useAppContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -56,25 +51,12 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-  const { refetch } = useQuery({
-    queryFn: () =>
-      httpRequest.post(`${url}/auth/signout`, {
-        refresh_token: refreshLocal,
-      }),
-    enabled: false,
-    queryKey: ["logout"],
-    onSuccess: () => {
-      handleLogoutUser();
-      handleToast("Loggedout successfully", "success");
-      navigate("/");
-    },
-  });
-
   function handleMenuClick(url: string | undefined, id: number) {
     handleClose();
     if (url) navigate(url);
     if (id == 4) {
-      refetch();
+      handleLogoutUser();
+      navigate("/");
     }
   }
 
