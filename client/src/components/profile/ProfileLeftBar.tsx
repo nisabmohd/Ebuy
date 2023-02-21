@@ -20,9 +20,28 @@ const LEFT_TILE_TABS = [
 
 export default function ProfileLeftBar() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        width: "22%",
+      }}
+    >
       {LEFT_TILE_TABS.map((item) => (
-        <Link key={item.id} to={item.link}>
+        <Link
+          key={item.id}
+          to={item.link}
+          style={{
+            color: "inherit",
+            textDecoration: "none",
+            fontSize: "14px",
+            fontWeight: "bold",
+            borderBottom: "1px solid #f6f6f6",
+            paddingBottom: "14px",
+            width: "100%",
+          }}
+        >
           {item.name}
         </Link>
       ))}

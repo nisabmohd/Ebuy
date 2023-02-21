@@ -57,7 +57,7 @@ export default function AuthContext({ children }: AuthContextProp) {
   }
   function handleLogoutUser() {
     setAuth({ user: undefined });
-    setIsAuthenticated(true);
+    setIsAuthenticated(false);
     clearLocalStorage();
     logout();
   }

@@ -17,7 +17,7 @@ export default function IncDec({ quantity, inc, dec, id }: IncDecType) {
       <button onClick={() => dec(id)} style={btnStyle}>
         -
       </button>
-      <p style={{ fontSize: "13px" }}>{quantity}</p>
+      <p style={{ fontSize: "13px", fontFamily: "Poppins" }}>{quantity}</p>
       <button onClick={() => inc(id)} style={btnStyle}>
         +
       </button>
@@ -31,4 +31,5 @@ const btnStyle = {
   outline: "none",
   borderRadius: "4px",
   cursor: "pointer",
+  fontFamily: "Poppins",
 };

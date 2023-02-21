@@ -42,11 +42,7 @@ export default function Profile() {
         lastname: data.lastname ?? "",
         email: data.email ?? "",
         mobile: data.mobile,
-        avatar:
-          data.avatar ??
-          `https://api.dicebear.com/5.x/initials/svg?seed=${
-            data.firstname + data.lastname
-          }`,
+        avatar: data.avatar,
         savedAddress: data.savedAddress as AddressType[],
       };
       setUser(thisUser);
@@ -108,17 +104,26 @@ export default function Profile() {
     refetch();
   }
 
+  function handleDeleteAddress(id: string) {
+    setUser((prev) => {
+      return {
+        ...prev,
+        savedAddress: user.savedAddress.filter((item) => item._id != id),
+      };
+    });
+  }
+
   if (isLoading) return <Loader />;
 
   return (
     <div
       style={{
         width: "85%",
-        borderLeft: "1px solid #dadada",
+        borderLeft: "1px solid #f6f6f6",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: "5vh 0",
+        padding: "2vh 0",
         minHeight: "75vh",
       }}
     >
@@ -127,56 +132,106 @@ export default function Profile() {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
-          alignItems: "center",
+          gap: "10px",
         }}
       >
         <img
-          style={{ width: "100px", borderRadius: "8px" }}
-          src={user?.avatar}
+          style={{ width: "75px", borderRadius: "12px", marginBottom: "22px" }}
+          src={
+            user?.avatar ??
+            `https://api.dicebear.com/5.x/initials/svg?seed=${
+              user?.firstname + " " + user?.lastname
+            }`
+          }
           alt=""
         />
-        <input
-          onChange={(e) => handleChangeInputs(e)}
-          style={inputStyle}
-          name="firstname"
-          value={user?.firstname}
-          type="text"
-          placeholder="Firstname"
-          id=""
-        />
-        <input
-          style={inputStyle}
-          onChange={(e) => handleChangeInputs(e)}
-          name="lastname"
-          value={user?.lastname}
-          type="text"
-          placeholder="Lastname"
-          id=""
-        />
-        <input
-          onChange={(e) => handleChangeInputs(e)}
-          style={inputStyle}
-          name="email"
-          value={user?.email}
-          type="email"
-          placeholder="Email"
-          id=""
-        />
-        <input
-          onChange={(e) => handleChangeInputs(e)}
-          style={inputStyle}
-          name="mobile"
-          value={user?.mobile}
-          type="mobile"
-          placeholder="Mobile"
-          id=""
-        />
-        <h3>Saved Address</h3>
-        <ul>
+        <h3
+          style={{
+            marginBottom: "14px",
+            fontFamily: "Poppins",
+            fontWeight: "normal",
+          }}
+        >
+          Personal Information
+        </h3>
+        <div
+          style={{
+            border: "1px solid #e0e0e0",
+            borderRadius: "14px",
+            padding: "28px",
+          }}
+        >
+          <div className="input_profile" style={inputDiv}>
+            <label htmlFor="firstname" style={labelStyleProfile}>
+              Firstname
+            </label>
+            <input
+              onChange={(e) => handleChangeInputs(e)}
+              style={inputStyle}
+              name="firstname"
+              value={user?.firstname}
+              type="text"
+              placeholder="Firstname"
+              id=""
+            />
+          </div>
+          <div className="input_profile" style={inputDiv}>
+            <label htmlFor="lastname" style={labelStyleProfile}>
+              Lastname
+            </label>
+            <input
+              style={inputStyle}
+              onChange={(e) => handleChangeInputs(e)}
+              name="lastname"
+              value={user?.lastname}
+              type="text"
+              placeholder="Lastname"
+              id=""
+            />
+          </div>
+          <div className="input_profile" style={inputDiv}>
+            <label htmlFor="lastname" style={labelStyleProfile}>
+              Email
+            </label>
+            <input
+              onChange={(e) => handleChangeInputs(e)}
+              style={inputStyle}
+              name="email"
+              value={user?.email}
+              type="email"
+              placeholder="Email"
+              id=""
+            />
+          </div>
+          <div className="input_profile" style={inputDiv}>
+            <label htmlFor="lastname" style={labelStyleProfile}>
+              Phone
+            </label>
+            <input
+              onChange={(e) => handleChangeInputs(e)}
+              style={inputStyle}
+              name="mobile"
+              value={user?.mobile}
+              type="mobile"
+              placeholder="Mobile"
+              id=""
+            />
+          </div>
+        </div>
+        <h3
+          style={{
+            margin: "14px 0",
+            fontFamily: "Poppins",
+            fontWeight: "normal",
+          }}
+        >
+          Saved Address
+        </h3>
+        <div style={{ maxHeight: "800px", overflowY: "auto" }}>
           {user.savedAddress.map((item) => {
             return (
               <Address
+                handleDeleteAddress={handleDeleteAddress}
                 key={item._id}
                 handlechange={handleChangeAddress}
                 phone={item.phone}
@@ -187,16 +242,60 @@ export default function Profile() {
               />
             );
           })}
-        </ul>
-        <button onClick={() => handleAddNewAddress()}>Add address</button>
+        </div>
+        <button
+          style={{
+            padding: "10px 0",
+            fontFamily: "Poppins",
+            borderRadius: "7px",
+            border: "none",
+            outline: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => handleAddNewAddress()}
+        >
+          Add address
+        </button>
       </div>
-      <button onClick={handleSaveProfile}>Save Profile</button>
+      <button
+        style={{
+          padding: "10px 15px",
+          fontFamily: "Poppins",
+          borderRadius: "7px",
+          border: "none",
+          outline: "none",
+          cursor: "pointer",
+          marginTop: "22px",
+          backgroundColor: "green",
+          color: "white",
+        }}
+        onClick={handleSaveProfile}
+      >
+        Save Profile
+      </button>
     </div>
   );
 }
 
-const inputStyle = {
+export const inputStyle = {
   width: "220px",
   height: "28px",
   padding: "2px 4px",
+  border: "none",
+  outline: "none",
+  fontSize: "13px",
+  fontFamily: "Poppins",
+};
+
+export const labelStyleProfile = {
+  fontSize: "14px",
+  fontFamily: "Poppins",
+  color: "gray",
+  minWidth: "75px",
+};
+
+export const inputDiv = {
+  display: "flex",
+  gap: "15px",
+  alignItems: "center",
 };
