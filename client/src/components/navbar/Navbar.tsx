@@ -8,13 +8,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../contexts/AuthContext";
-import { useAppContext } from "../../App";
-import { httpRequest } from "../../interceptor/axiosInterceptor";
-import { url } from "../../url";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { useShopping } from "../../contexts/ShoppingContext";
 
 const profileMenu = [
   {

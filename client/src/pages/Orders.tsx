@@ -1,6 +1,12 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { httpRequest } from "../interceptor/axiosInterceptor";
+import { url } from "../url";
 
 export default function Orders() {
+  const { data, isLoading, isError } = useQuery({
+    queryFn: () => httpRequest.get(`${url}/user/myorders`),
+    queryKey: ["myorders"],
+  });
   return (
     <div
       style={{
@@ -13,7 +19,13 @@ export default function Orders() {
         minHeight: "75vh",
       }}
     >
-      Orders
+      <h3>My Orders</h3>
+      {data?.data.length === 0 && !isLoading && (
+        <p style={{ marginTop: "6vh" }}>Nothing to see here.</p>
+      )}
+      {data?.data?.map((item: any) => (
+        <pre>{JSON.stringify(item)}</pre>
+      ))}
     </div>
   );
 }

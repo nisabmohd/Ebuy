@@ -1,6 +1,12 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { httpRequest } from "../interceptor/axiosInterceptor";
+import { url } from "../url";
 
 export default function Notifications() {
+  const { data, isLoading, isError } = useQuery({
+    queryFn: () => httpRequest.get(`${url}/user/mynotifications`),
+    queryKey: ["notifications"],
+  });
   return (
     <div
       style={{
@@ -13,7 +19,13 @@ export default function Notifications() {
         minHeight: "75vh",
       }}
     >
-      Notifications
+      <h3>Notifications</h3>
+      {data?.data.length === 0 && !isLoading && (
+        <p style={{ marginTop: "6vh" }}>No Notifications</p>
+      )}
+      {data?.data?.map((item: any) => (
+        <pre>{JSON.stringify(item)}</pre>
+      ))}
     </div>
   );
 }

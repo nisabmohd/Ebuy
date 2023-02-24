@@ -11,7 +11,7 @@ export type AddressType = {
   city: string;
   state: string;
   phone: string;
-  _id: string;
+  id: string;
 };
 
 type UserType = {
@@ -43,11 +43,15 @@ export default function Profile() {
         email: data.email ?? "",
         mobile: data.mobile,
         avatar: data.avatar,
-        savedAddress: data.savedAddress as AddressType[],
+        savedAddress: data.savedAddress.map((item: any) => {
+          return { ...item, id: item._id };
+        }) as AddressType[],
       };
       setUser(thisUser);
     },
   });
+
+  console.log(user);
 
   const { refetch } = useQuery({
     queryFn: () => httpRequest.put(`${url}/user/edit`, user),
@@ -73,7 +77,7 @@ export default function Profile() {
       return {
         ...prev,
         savedAddress: [
-          ...prev.savedAddress.filter((item) => item._id != AddessValue._id),
+          ...prev.savedAddress.filter((item) => item.id != AddessValue.id),
           AddessValue,
         ],
       };
@@ -87,7 +91,7 @@ export default function Profile() {
       city: "",
       phone: "",
       state: "",
-      _id: new Date().toISOString(),
+      id: new Date().toISOString(),
     });
     setUser((prev) => {
       return { ...prev, savedAddress: address };
@@ -108,7 +112,7 @@ export default function Profile() {
     setUser((prev) => {
       return {
         ...prev,
-        savedAddress: user.savedAddress.filter((item) => item._id != id),
+        savedAddress: user.savedAddress.filter((item) => item.id != id),
       };
     });
   }
@@ -232,13 +236,13 @@ export default function Profile() {
             return (
               <Address
                 handleDeleteAddress={handleDeleteAddress}
-                key={item._id}
+                key={item.id}
                 handlechange={handleChangeAddress}
                 phone={item.phone}
                 state={item.state}
                 address={item.address}
                 city={item.city}
-                _id={item._id}
+                id={item.id}
               />
             );
           })}

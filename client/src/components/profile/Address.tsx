@@ -18,7 +18,7 @@ export default function Address({
   phone,
   state,
   city,
-  _id,
+  id,
   handlechange,
   handleDeleteAddress,
 }: AddressTypeProps) {
@@ -27,7 +27,7 @@ export default function Address({
     phone,
     state,
     city,
-    _id,
+    id,
   });
   function handlechangeInputs(e: React.ChangeEvent<HTMLInputElement>) {
     setAddressValue((prev) => {
@@ -55,7 +55,7 @@ export default function Address({
           top: "15px",
           right: "15px",
         }}
-        onClick={() => handleDeleteAddress(_id)}
+        onClick={() => handleDeleteAddress(id)}
       >
         <DeleteOutline
           sx={{
@@ -91,7 +91,7 @@ export default function Address({
       </div>
       <div className="input_profile" style={inputDiv}>
         <label htmlFor="lastname" style={labelStyleProfile}>
-          Phone
+          State
         </label>
         <input
           name="state"
@@ -104,7 +104,7 @@ export default function Address({
       </div>
       <div className="input_profile" style={inputDiv}>
         <label htmlFor="lastname" style={labelStyleProfile}>
-          Phone
+          City
         </label>
         <input
           name="city"
